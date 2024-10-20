@@ -1,18 +1,29 @@
-import './App.css'
+import { Routes, Route } from 'react-router-dom'
+import AuthLayout from './_auth/AuthLayout'
+import SigninForm from './_auth/forms/SigninForm'
+import SignupForm from './_auth/forms/SignupForm'
+import { Toaster } from './components/ui/toaster'
+import RootLayout from './_root/RootLayout'
+import Home from './_root/pages/Home'
 
 function App() {
   return (
-    <div className="text-center w-full">
-      <h1 className="text-5xl">Valheim helper 👍</h1>
-      <h2 className="text-3xl mt-2">Work in progress...</h2>
-      <ol className="font-mono list-decimal list-inside w-fit text-left mt-2">
-        <li>Copy data, types and models to project</li>
-        <li>Setup database, server and authentication</li>
-        <li>Design app UI and structure</li>
-        <li>Implement logic </li>
-        <li>Deploy to production</li>
-      </ol>
-    </div>
+    <main className="flex h-screen">
+      <Routes>
+        {/*public routes*/}
+        <Route element={<AuthLayout />}>
+          <Route path="/sign-in" element={<SigninForm />} />
+          <Route path="/sign-up" element={<SignupForm />} />
+        </Route>
+
+        {/*private routes */}
+        <Route element={<RootLayout />}>
+          <Route index element={<Home />} />
+        </Route>
+      </Routes>
+
+      <Toaster />
+    </main>
   )
 }
 
