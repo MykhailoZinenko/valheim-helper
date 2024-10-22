@@ -1,16 +1,16 @@
-import { getCurrentUser } from '@/lib/appwrite/api'
-import { IContextType, IUser } from '@/types'
-import { createContext, useContext, useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { getCurrentUser } from "@/lib/appwrite/api"
+import { IContextType, IUser } from "@/types"
+import { createContext, useContext, useEffect, useState } from "react"
+import { useLocation, useNavigate } from "react-router-dom"
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const INITIAL_USER = {
-  id: '',
-  name: '',
-  username: '',
-  email: '',
-  imageUrl: '',
-  bio: ''
+  id: "",
+  name: "",
+  username: "",
+  email: "",
+  imageUrl: "",
+  bio: "",
 }
 
 const INITIAL_STATE = {
@@ -19,7 +19,7 @@ const INITIAL_STATE = {
   isAuthenticated: false,
   setUser: () => {},
   setIsAuthenticated: () => {},
-  checkAuthUser: async () => false as boolean
+  checkAuthUser: async () => false as boolean,
 }
 
 const AuthContext = createContext<IContextType>(INITIAL_STATE)
@@ -30,6 +30,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   const navigate = useNavigate()
+  const { pathname } = useLocation()
 
   const checkAuthUser = async () => {
     try {
@@ -39,8 +40,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser({
           id: currentAccount.$id,
           name: currentAccount.name,
-          username: currentAccount.username,
-          email: currentAccount.email
+          email: currentAccount.email,
         })
 
         setIsAuthenticated(true)
@@ -59,10 +59,12 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     if (
-      localStorage.getItem('cookieFallback') === '[]' ||
-      localStorage.getItem('cookieFallback') === null
+      localStorage.getItem("cookieFallback") === "[]" ||
+      localStorage.getItem("cookieFallback") === null
     ) {
-      navigate('/sign-in')
+      if (pathname !== "/sign-up") {
+        navigate("/sign-in")
+      }
     }
 
     checkAuthUser()
@@ -74,7 +76,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isLoading,
     isAuthenticated,
     setIsAuthenticated,
-    checkAuthUser
+    checkAuthUser,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

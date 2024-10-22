@@ -1,26 +1,21 @@
-import { Button } from '@/components/ui/button'
-import { useSignOutAccount } from '@/lib/react-query/queriesAndMutations'
-import { useEffect } from 'react'
-import { Outlet, useNavigate } from 'react-router-dom'
+import LeftSidebar from "@/components/shared/LeftSidebar"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { Outlet } from "react-router-dom"
 
 const RootLayout = () => {
-  const navigate = useNavigate()
-  const { mutate: signOut, isSuccess } = useSignOutAccount()
-
-  useEffect(() => {
-    if (isSuccess) {
-      navigate(0)
-    }
-  }, [isSuccess])
-
   return (
-    <div className="h-full w-full flex flex-col items-center p-8">
-      <Outlet />
+    <SidebarProvider className="bg-color-primary-bg">
+      <div className="w-full min-h-100vh h-full flex bg-color-primary-bg">
+        <LeftSidebar />
 
-      <Button className="mt-4" onClick={() => signOut()}>
-        <p className="base-medium">Logout</p>
-      </Button>
-    </div>
+        <section className="h-full w-full flex flex-col items-center">
+          <SidebarTrigger className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover self-start m-6 h-[28px] w-[28px]" />
+          <div className="p-8">
+            <Outlet />
+          </div>
+        </section>
+      </div>
+    </SidebarProvider>
   )
 }
 

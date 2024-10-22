@@ -1,6 +1,6 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Link, useNavigate } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Link, useNavigate } from "react-router-dom"
+import { useForm } from "react-hook-form"
 
 import {
   Form,
@@ -8,15 +8,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { SigninValidation } from '@/lib/validation'
-import { z } from 'zod'
-import { useToast } from '@/hooks/use-toast'
-import { useSignInAccount } from '@/lib/react-query/queriesAndMutations'
-import { useUserContext } from '@/context/AuthContext'
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
+import { SigninValidation } from "@/lib/validation"
+import { z } from "zod"
+import { useToast } from "@/hooks/use-toast"
+import { useSignInAccount } from "@/lib/react-query/queriesAndMutations"
+import { useUserContext } from "@/context/AuthContext"
 
 const SigninForm = () => {
   const { toast } = useToast()
@@ -30,21 +30,21 @@ const SigninForm = () => {
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: "",
+    },
   })
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
     const session = await signInAccount({
       email: values.email,
-      password: values.password
+      password: values.password,
     })
 
     if (!session) {
       return toast({
-        title: 'Sign up failed. Please try again.'
+        title: "Sign up failed. Please try again.",
       })
     }
 
@@ -53,23 +53,23 @@ const SigninForm = () => {
     if (isLoggedIn) {
       form.reset()
 
-      navigate('/')
+      navigate("/")
     } else {
       return toast({
-        title: 'Sign up failed. Please try again.'
+        title: "Sign up failed. Please try again.",
       })
     }
   }
 
   return (
     <Form {...form}>
-      <div className="flex flex-col items-center justify-center w-full min-h-screen bg-gray-50 px-4 py-8">
-        <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
-          <h2 className="text-3xl font-semibold text-gray-800 mb-4 text-center">
+      <div className="flex flex-col items-center justify-center w-full min-h-screen px-4 py-8">
+        <div className="max-w-md w-full bg-color-secondary-bg rounded-lg shadow-lg p-8">
+          <h2 className="text-5xl font-semibold font-norse text-color-text-primary mb-2 text-center">
             Log in to your account
           </h2>
 
-          <p className="text-lg text-gray-500 mb-6 text-center">
+          <p className="text-xl font-norse text-color-text-tertiary mb-4 text-center">
             Welcome back! Please enter your details
           </p>
 
@@ -79,16 +79,18 @@ const SigninForm = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md text-gray-700">Email</FormLabel>
+                  <FormLabel className="text-md text-color-text-secondary">
+                    Email
+                  </FormLabel>
                   <FormControl>
                     <Input
                       type="email"
-                      className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 w-full rounded-md p-2"
+                      className="bg-color-input-bg text-color-text-primary border-color-border focus:ring-color-focus focus:border-color-focus w-full rounded-md p-2"
                       placeholder="Enter your email"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-color-error" />
                 </FormItem>
               )}
             />
@@ -97,36 +99,36 @@ const SigninForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-md text-gray-700">
+                  <FormLabel className="text-md text-color-text-secondary">
                     Password
                   </FormLabel>
                   <FormControl>
                     <Input
                       type="password"
-                      className="border-gray-300 focus:ring-indigo-500 focus:border-indigo-500 w-full rounded-md p-2"
+                      className="bg-color-input-bg text-color-text-primary border-color-border focus:ring-color-focus focus:border-color-focus w-full rounded-md p-2"
                       placeholder="Enter your password"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-color-error" />
                 </FormItem>
               )}
             />
             <Button
               type="submit"
-              className="w-full py-2 px-4 bg-indigo-600 text-white font-semibold rounded-md hover:bg-indigo-700 transition-all duration-300"
+              className="w-full py-2 px-4 bg-color-button-bg text-color-button-text font-semibold rounded-md hover:bg-color-button-hover transition-all duration-300"
             >
               {isUserLoading ? (
                 <div className="text-center">Loading...</div>
               ) : (
-                'Sign in'
+                "Sign in"
               )}
             </Button>
 
-            <p className="text-center text-sm text-gray-500">
+            <p className="text-center text-sm text-color-text-tertiary">
               Don't have an account?
               <Link
-                className="text-indigo-600 hover:underline ml-1"
+                className="text-color-link hover:underline ml-1"
                 to="/sign-up"
               >
                 Sign up

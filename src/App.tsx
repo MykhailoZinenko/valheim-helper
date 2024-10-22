@@ -1,10 +1,10 @@
-import { Routes, Route } from 'react-router-dom'
-import AuthLayout from './_auth/AuthLayout'
-import SigninForm from './_auth/forms/SigninForm'
-import SignupForm from './_auth/forms/SignupForm'
-import { Toaster } from './components/ui/toaster'
-import RootLayout from './_root/RootLayout'
-import Home from './_root/pages/Home'
+import { Routes, Route } from "react-router-dom"
+import AuthLayout from "./_auth/AuthLayout"
+import SigninForm from "./_auth/forms/SigninForm"
+import SignupForm from "./_auth/forms/SignupForm"
+import { Toaster } from "./components/ui/toaster"
+import RootLayout from "./_root/RootLayout"
+import Home from "./_root/pages/Home"
 
 function App() {
   return (
