@@ -29,3 +29,12 @@ export type INewUser = {
   email: string
   password: string
 }
+
+export type IItem = {
+  id: string
+  name: string
+  originalName: string
+  type: string
+  icon: string
+  tier: number
+}

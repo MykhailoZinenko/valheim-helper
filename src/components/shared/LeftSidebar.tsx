@@ -1,4 +1,4 @@
-import { ChevronUp, HomeIcon, User2 } from "lucide-react"
+import { CalculatorIcon, ChevronUp, HomeIcon, User2 } from "lucide-react"
 
 import {
   Sidebar,
@@ -6,6 +6,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -47,6 +48,21 @@ const LeftSidebar = () => {
                   <Link to={"/"}>
                     <HomeIcon />
                     <span>Home</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        <SidebarGroup>
+          <SidebarGroupLabel>Calculators</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem key={"resource-calc"}>
+                <SidebarMenuButton asChild>
+                  <Link to={"/resource-calculator"}>
+                    <CalculatorIcon />
+                    <span>Resource</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

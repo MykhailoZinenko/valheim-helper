@@ -7,6 +7,7 @@ import {
 } from "../appwrite/api"
 import { INewUser } from "@/types"
 import { QUERY_KEYS } from "./queryKeys"
+import { getAllItems, getItemById } from "../valheim-helper/api"
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -31,5 +32,20 @@ export const useGetCurrentUser = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     queryFn: getCurrentUser,
+  })
+}
+
+export const useGetItems = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_ITEMS],
+    queryFn: getAllItems,
+  })
+}
+
+export const useGetItemById = (itemId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_ITEM_BY_ID, itemId],
+    queryFn: () => getItemById(itemId),
+    enabled: !!itemId,
   })
 }

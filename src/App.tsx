@@ -5,6 +5,8 @@ import SignupForm from "./_auth/forms/SignupForm"
 import { Toaster } from "./components/ui/toaster"
 import RootLayout from "./_root/RootLayout"
 import Home from "./_root/pages/Home"
+import Item from "./_root/pages/Item"
+import ResourceCalculator from "./_root/pages/ResourceCalculator"
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
         {/*private routes */}
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
+          <Route path="/item/:id" element={<Item />} />
+          <Route path="/resource-calculator" element={<ResourceCalculator />} />
         </Route>
       </Routes>
 

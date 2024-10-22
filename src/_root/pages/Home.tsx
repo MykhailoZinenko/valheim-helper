@@ -1,7 +1,9 @@
-import { useUserContext } from "@/context/AuthContext"
+import { useGetItems } from "@/lib/react-query/queriesAndMutations"
+import { IItem } from "@/types"
+import { Link } from "react-router-dom"
 
 const Home = () => {
-  const { user } = useUserContext()
+  const { data, isLoading } = useGetItems()
 
   return (
     <div className="flex">
@@ -9,9 +11,17 @@ const Home = () => {
         <h1 className="text-5xl">Valheim helper 👍</h1>
         <h2 className="text-3xl mt-4">Work in progress...</h2>
         <ol className="font-mono list-decimal list-inside w-fit text-left mt-4">
-          <li>{user.id}</li>
-          <li>{user.name}</li>
-          <li>{user.email}</li>
+          {isLoading ? (
+            <li>Loading...</li>
+          ) : (
+            data.items?.map((item: IItem) => (
+              <li key={item.id}>
+                <img src={item.icon} />{" "}
+                <Link to={`/item/${item.id}`}>{item.name}</Link>{" "}
+                {" " + item.type}
+              </li>
+            ))
+          )}
         </ol>
       </div>
     </div>
