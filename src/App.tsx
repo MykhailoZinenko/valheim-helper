@@ -7,6 +7,8 @@ import RootLayout from "./_root/RootLayout"
 import Home from "./_root/pages/Home"
 import Item from "./_root/pages/Item"
 import ResourceCalculator from "./_root/pages/ResourceCalculator"
+import About from "./_root/pages/About"
+import Settings from "./_root/pages/Settings"
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         {/*private routes */}
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/item/:id" element={<Item />} />
           <Route path="/resource-calculator" element={<ResourceCalculator />} />
         </Route>

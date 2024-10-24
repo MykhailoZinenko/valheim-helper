@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   createUserAccount,
   getCurrentUser,
@@ -47,5 +47,32 @@ export const useGetItemById = (itemId: string) => {
     queryKey: [QUERY_KEYS.GET_ITEM_BY_ID, itemId],
     queryFn: () => getItemById(itemId),
     enabled: !!itemId,
+  })
+}
+
+export const useGetItemByIdMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: async (itemId: string) => {
+      const cachedItem = queryClient.getQueryData([QUERY_KEYS.GET_ITEM_BY_ID, itemId])
+
+      console.log("here")
+      
+      if (cachedItem) {
+        return cachedItem
+      }
+
+      console.log("Fetching item...")
+
+      const fetchedItem = await getItemById(itemId)
+
+      if (fetchedItem) {
+        queryClient.setQueryData([QUERY_KEYS.GET_ITEM_BY_ID, itemId], fetchedItem)
+        return fetchedItem
+      }
+
+      throw new Error("Item not found")
+    }, 
   })
 }
