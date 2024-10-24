@@ -25,7 +25,9 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/settings" element={<Settings />} />
-          <Route path="/item/:id" element={<Item />} />
+          <Route path="/item/:id" element={<Item />}>
+            <Route path="/item/:id/:level" element={<Item />}></Route>
+          </Route>
           <Route path="/resource-calculator" element={<ResourceCalculator />} />
         </Route>
       </Routes>

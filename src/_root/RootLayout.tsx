@@ -10,7 +10,7 @@ const RootLayout = () => {
 
         <section className="h-full w-full flex flex-col items-center">
           <SidebarTrigger className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover self-start m-6 min-h-[28px] min-w-[28px]" />
-          <div className="h-full w-full p-7 pt-0 max-w-5xl">
+          <div className="h-full w-full p-12 pt-6 max-w-5xl">
             <Outlet />
           </div>
         </section>
