@@ -65,7 +65,11 @@ const Creature = ({ data }: { data: any }) => {
               {Array.from({
                 length: maxLevel,
               }).map((_, i) => (
-                <Link key={i} to={`/item/${data.id}/${i}`}>
+                <Link
+                  key={i}
+                  to={`/item/${data.id}/${i}`}
+                  className="cursor-pointer"
+                >
                   <TabsTrigger value={`${i}`}>
                     <span>{i}</span>
                     <StarFilledIcon className="ml-1" />

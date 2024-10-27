@@ -12,7 +12,7 @@ import Settings from "./_root/pages/Settings"
 
 function App() {
   return (
-    <main className="flex h-screen">
+    <main className="flex m-h-screen">
       <Routes>
         {/*public routes*/}
         <Route element={<AuthLayout />}>

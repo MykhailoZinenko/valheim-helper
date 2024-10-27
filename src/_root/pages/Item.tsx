@@ -16,7 +16,7 @@ const Item = () => {
       ) : (
         <>
           <div>{data.item.id + " " + data.item.type}</div>
-          <pre>{JSON.stringify(data.item, null, 2)}</pre>{" "}
+          {/* <pre>{JSON.stringify(data.item, null, 2)}</pre>{" "} */}
         </>
       )}
     </>

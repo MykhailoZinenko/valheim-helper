@@ -59,10 +59,11 @@ const LeftSidebar = () => {
       navigate(0)
     }
   }, [isSuccess])
+
   return (
-    <Sidebar className="p-2">
+    <Sidebar className="p-2 xl:left-auto" variant="floating">
       <SidebarHeader className="p-4">
-        <h2 className="text-3xl font-norse font-bold">Valheim helper</h2>
+        <h2 className="text-4xl font-norse font-bold">Valheim helper</h2>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>

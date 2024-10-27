@@ -7,9 +7,11 @@ const Home = () => {
 
   return (
     <div className="flex">
-      <div className="text-center w-full text-color-text-primary">
-        <h1 className="text-5xl font-norse font-bold">Valheim helper</h1>
-        <h2 className="text-3xl mt-4 font-norse text-color-text-secondary">
+      <div>
+        <h1 className="text-5xl font-norse font-bold text-color-text-primary">
+          Valheim helper
+        </h1>
+        <h2 className="text-3xl mt-2 font-norse text-color-text-secondary">
           Explore items
         </h2>
         <ol className="font-mono list-decimal list-inside w-fit text-left mt-4">
