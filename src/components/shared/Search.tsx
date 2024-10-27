@@ -52,7 +52,13 @@ const FilterGroup: React.FC<FilterGroupProps> = ({
         <label className="text-[16px] text-muted-foreground capitalize w-16">
           {label}
         </label>
-        <Select onValueChange={(value) => onValueChange(label, value)}>
+        <Select
+          onValueChange={(value) => {
+            onValueChange(label, value)
+            return ""
+          }}
+          value={""}
+        >
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder={label} />
           </SelectTrigger>
@@ -73,19 +79,19 @@ const FilterGroup: React.FC<FilterGroupProps> = ({
               <Badge
                 key={value}
                 variant="secondary"
-                className="flex-shrink-0 items-center gap-1 bg-color-secondary-bg"
+                className="flex-shrink-0 items-center gap-1 bg-color-secondary-bg text-color-text-secondary"
               >
-                {value}
                 <button
                   onClick={() => onRemove(label, value)}
-                  className="ml-1 hover:bg-color-button-hover rounded-full p-0.5"
+                  className="ml-1 hover:bg-color-button-hover rounded-full p-0.5 flex items-center gap-1"
                 >
+                  {value}
                   <X className="h-3 w-3" />
                 </button>
               </Badge>
             ))
           ) : (
-            <p className="text-[12px] text-muted-foreground h-[22px]">
+            <p className="text-[12px] text-muted-foreground h-[26px]">
               No {label} filter applied
             </p>
           )}
@@ -280,20 +286,23 @@ const Search: React.FC = () => {
           <SearchIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-0 rounded-md h-max max-w-[700px] w-full">
+      <DialogContent className="p-0 rounded-md max-w-[700px] w-11/12 h-[410px]">
         <div className="flex">
           {/* Filters Section - Hidden on mobile when showing search */}
           <div
-            className={`${showFilters ? "block w-full h-[400px]" : "hidden md:block md:w-[240px]"} flex-none flex flex-col border-r`}
+            className={`${showFilters ? "block w-full" : "hidden md:block md:w-[240px]"} flex-none flex flex-col border-r`}
           >
-            <div className="flex items-center px-3 border-b w-full py-2">
+            <div className="flex items-center gap-2 px-3 border-b w-full py-2">
               <button
                 onClick={() => setShowFilters(false)}
-                className="md:hidden mr-2"
+                className="md:hidden"
               >
                 <ArrowLeft className="h-4 w-4" />
               </button>
               <p>Filters</p>
+              <span className="h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
+                {totalFiltersApplied}
+              </span>
             </div>
 
             <div className="px-3 pb-2 pt-4 space-y-2">
@@ -312,7 +321,7 @@ const Search: React.FC = () => {
 
           {/* Search Section - Hidden on mobile when showing filters */}
           <div
-            className={`flex-1 ${showFilters ? "hidden md:block" : "block h-[400px]"}`}
+            className={`flex-1 ${showFilters ? "hidden md:block" : "block"}`}
           >
             <DialogHeader className="border-b">
               <DialogTitle className="flex items-center gap-2">
@@ -324,7 +333,7 @@ const Search: React.FC = () => {
                 >
                   <Filter className="h-4 w-4" />
                   {totalFiltersApplied > 0 && (
-                    <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
+                    <span className="absolute -top-2 -left-2 h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
                       {totalFiltersApplied}
                     </span>
                   )}
@@ -345,7 +354,7 @@ const Search: React.FC = () => {
               </DialogTitle>
             </DialogHeader>
 
-            <div className="h-[355px] overflow-auto">
+            <div className="h-[360px] overflow-auto">
               {isLoading ? (
                 <div>Loading...</div>
               ) : pending ? (
@@ -353,7 +362,7 @@ const Search: React.FC = () => {
               ) : (
                 <List
                   ref={listRef}
-                  height={355}
+                  height={360}
                   itemCount={searchTerm ? results.length : filteredItems.length}
                   itemSize={40}
                   width="100%"
