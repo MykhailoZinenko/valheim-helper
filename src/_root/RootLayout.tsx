@@ -11,7 +11,7 @@ const RootLayout = () => {
         <LeftSidebar />
 
         <section className="w-full flex flex-col items-center">
-          <div className="w-full xl:w-fit xl:self-end flex justify-between xl:justify-end p-6 xl:pl-0 pr-12 pb-2 sticky xl:fixed top-0 bg-color-primary-bg">
+          <div className="w-full xl:w-fit xl:self-end flex justify-between xl:justify-end p-6 xl:pl-0 pr-6 pb-2 sticky xl:fixed top-0 bg-color-primary-bg">
             <SidebarTrigger className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover" />
 
             <Search />
