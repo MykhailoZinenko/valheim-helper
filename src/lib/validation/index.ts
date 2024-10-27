@@ -18,3 +18,8 @@ export const SigninValidation = z.object({
 export const AddResourceValidation = z.object({
   id: z.string(),
 })
+
+export const FeedbackValidation = z.object({
+  issueType: z.string().min(1, { message: "Issue type is required" }),
+  description: z.string().min(1, { message: "Description is required" }),
+});

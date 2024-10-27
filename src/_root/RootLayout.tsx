@@ -1,3 +1,4 @@
+import Feedback from "@/components/shared/Feedback"
 import LeftSidebar from "@/components/shared/LeftSidebar"
 import Search from "@/components/shared/Search"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
@@ -14,7 +15,10 @@ const RootLayout = () => {
           <div className="w-full xl:w-fit xl:self-end flex justify-between xl:justify-end p-6 xl:pl-0 pr-6 pb-2 sticky xl:fixed top-0 bg-color-primary-bg">
             <SidebarTrigger className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover" />
 
-            <Search />
+            <div className="flex space-x-2">
+              <Feedback />
+              <Search />
+            </div>
           </div>
 
           <div className="w-full p-12 pt-7 xl:pr-[104px] xl:pt-6 max-w-5xl">

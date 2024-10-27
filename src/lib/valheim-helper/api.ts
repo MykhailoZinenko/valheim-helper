@@ -1,4 +1,6 @@
-const API_URL = import.meta.env.VITE_VALHEIM_HELPER_API_URL
+import { valheimHelperApiConfig } from "./config";
+
+const API_URL = valheimHelperApiConfig.url; 
 
 export const getAllItems = async () => {
     try {

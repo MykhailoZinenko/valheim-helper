@@ -5,10 +5,10 @@ import { defineConfig } from "vite"
 
 export default defineConfig({
   plugins: [react(), compression({
-      algorithm: 'brotliCompress',  // Use 'gzip' for Gzip compression
-      ext: '.br',  // '.gz' for gzip
-      threshold: 1024,  // Compress files larger than 1KB
-      deleteOriginFile: false,  // Keep original files (optional)
+      algorithm: 'brotliCompress',
+      ext: '.br',
+      threshold: 1024,
+      deleteOriginFile: false,
     }),],
   resolve: {
     alias: {
