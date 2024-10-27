@@ -1,6 +1,5 @@
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { StarFilledIcon } from "@radix-ui/react-icons"
-import React from "react"
 import { Link, useParams } from "react-router-dom"
 
 const difficultyScaleMaxPlayers = 5
@@ -34,7 +33,7 @@ const damageScale = (players: number = 1, stars: number = 0) => {
 const Creature = ({ data }: { data: any }) => {
   const maxLevel =
     data.spawners.length > 0
-      ? data.spawners.reduce((m, s) => Math.max(m, s.levels[1]), 0)
+      ? data.spawners.reduce((m: any, s: any) => Math.max(m, s.levels[1]), 0)
       : 1
 
   const { level: currentLevel } = useParams()
@@ -42,7 +41,7 @@ const Creature = ({ data }: { data: any }) => {
 
   const hpScale = healthPointsScale(1, level)
   const dmgScale = damageScale(1, level)
-  const dropScale = 2 ** (level - 1)
+  // const dropScale = 2 ** (level - 1)
 
   return (
     <div>

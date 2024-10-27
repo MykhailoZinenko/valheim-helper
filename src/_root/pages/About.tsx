@@ -1,6 +1,5 @@
 import { Card } from "@/components/ui/card"
 import { CoffeeIcon, FileIcon } from "lucide-react"
-import React from "react"
 
 const About = () => {
   return (

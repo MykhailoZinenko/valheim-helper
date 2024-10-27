@@ -1,9 +1,6 @@
 import LeftSidebar from "@/components/shared/LeftSidebar"
 import Search from "@/components/shared/Search"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { SearchIcon } from "lucide-react"
 import { Outlet } from "react-router-dom"
 
 const RootLayout = () => {
