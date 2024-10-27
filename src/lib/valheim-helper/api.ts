@@ -1,7 +1,8 @@
-const API_URL = import.meta.env.VALHEIM_HELPER_API_URL || "http://localhost:3000";
+const API_URL = import.meta.env.VITE_VALHEIM_HELPER_API_URL
 
 export const getAllItems = async () => {
     try {
+        console.log(API_URL)
         const response = await fetch(`${API_URL}/api/items`);
 
         if (!response.ok) {
