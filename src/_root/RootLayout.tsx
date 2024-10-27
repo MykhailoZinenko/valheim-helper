@@ -21,7 +21,7 @@ const RootLayout = () => {
             </div>
           </div>
 
-          <div className="w-full p-12 pt-7 xl:pr-[104px] xl:pt-6 max-w-5xl">
+          <div className="w-full h-full p-12 pt-7 xl:pr-[104px] xl:pt-6 max-w-5xl">
             <Outlet />
           </div>
         </section>

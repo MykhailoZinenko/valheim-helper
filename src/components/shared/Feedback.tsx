@@ -103,7 +103,7 @@ const Feedback = () => {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button
           size="icon"
           className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover ml-2 xl:ml-0"

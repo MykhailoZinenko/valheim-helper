@@ -26,6 +26,7 @@ import { filters } from "@/consts/searchFilters"
 import { Badge } from "../ui/badge"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { IItem } from "@/types"
+import Loader from "./Loader"
 
 interface FilterGroupProps {
   label: keyof typeof filters
@@ -246,6 +247,7 @@ const Search: React.FC = () => {
         ? prev[group].filter((item) => item !== value)
         : [...prev[group], value],
     }))
+    setSearchTerm("")
   }
 
   const handleFilterRemove = (group: string, value: string) => {
@@ -355,10 +357,14 @@ const Search: React.FC = () => {
             </DialogHeader>
 
             <div className="h-[360px] overflow-auto">
-              {isLoading ? (
-                <div>Loading...</div>
-              ) : pending ? (
-                <div>Searching...</div>
+              {isLoading || pending ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Loader size={"lg"} />
+                </div>
+              ) : searchTerm && results.length == 0 ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  No results found
+                </div>
               ) : (
                 <List
                   ref={listRef}

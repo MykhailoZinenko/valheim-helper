@@ -69,7 +69,7 @@ const About = () => {
 
       <Card className="m-4 max-w-[350px]">
         <a
-          href="public/assets/What we need for boss №3.txt"
+          href="/assets/What we need for boss №3.txt"
           download={true}
           className="flex items-center p-4 gap-4 text-color-link hover:underline"
         >
