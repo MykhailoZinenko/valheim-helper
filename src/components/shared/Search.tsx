@@ -288,95 +288,89 @@ const Search: React.FC = () => {
           <SearchIcon />
         </Button>
       </DialogTrigger>
-      <DialogContent className="p-0 rounded-md max-w-[700px] w-11/12 h-[410px]">
-        <div className="flex">
-          {/* Filters Section - Hidden on mobile when showing search */}
-          <div
-            className={`${showFilters ? "block w-full" : "hidden md:block md:w-[240px]"} flex-none flex flex-col border-r`}
-          >
-            <div className="flex items-center gap-2 px-3 border-b w-full py-2">
-              <button
-                onClick={() => setShowFilters(false)}
-                className="md:hidden"
-              >
-                <ArrowLeft className="h-4 w-4" />
-              </button>
-              <p>Filters</p>
-              <span className="h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
-                {totalFiltersApplied}
-              </span>
-            </div>
-
-            <div className="px-3 pb-2 pt-4 space-y-2">
-              {Object.keys(filters).map((filterKey) => (
-                <FilterGroup
-                  key={filterKey}
-                  label={filterKey as keyof typeof filters}
-                  options={filters[filterKey as keyof typeof filters]}
-                  selectedValues={selectedFilters[filterKey]}
-                  onValueChange={handleFilterChange}
-                  onRemove={handleFilterRemove}
-                />
-              ))}
-            </div>
+      <DialogContent className="p-0 rounded-md max-w-[700px] w-11/12 h-[420px] flex gap-0">
+        {/* Filters Section - Hidden on mobile when showing search */}
+        <div
+          className={`${showFilters ? "block w-full" : "hidden md:block md:w-[240px]"} flex-none flex flex-col border-r`}
+        >
+          <div className="flex items-center gap-2 px-3 border-b w-full py-2">
+            <button onClick={() => setShowFilters(false)} className="md:hidden">
+              <ArrowLeft className="h-4 w-4" />
+            </button>
+            <p>Filters</p>
+            <span className="h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
+              {totalFiltersApplied}
+            </span>
           </div>
 
-          {/* Search Section - Hidden on mobile when showing filters */}
-          <div
-            className={`flex-1 ${showFilters ? "hidden md:block" : "block"}`}
-          >
-            <DialogHeader className="border-b">
-              <DialogTitle className="flex items-center gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden h-9 w-10 ml-2"
-                  onClick={() => setShowFilters(true)}
-                >
-                  <Filter className="h-4 w-4" />
-                  {totalFiltersApplied > 0 && (
-                    <span className="absolute -top-2 -left-2 h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
-                      {totalFiltersApplied}
-                    </span>
-                  )}
-                </Button>
-                <Input
-                  ref={inputRef}
-                  placeholder="Search"
-                  className="border-none rounded-md h-10 text-[16px]"
-                  value={searchTerm}
-                  onChange={handleSearch}
-                />
+          <div className="px-3 pb-2 pt-4 space-y-2">
+            {Object.keys(filters).map((filterKey) => (
+              <FilterGroup
+                key={filterKey}
+                label={filterKey as keyof typeof filters}
+                options={filters[filterKey as keyof typeof filters]}
+                selectedValues={selectedFilters[filterKey]}
+                onValueChange={handleFilterChange}
+                onRemove={handleFilterRemove}
+              />
+            ))}
+          </div>
+        </div>
 
-                <DialogClose className="absolute right-2 top-2">
-                  <kbd className="pointer-events-none inline-flex h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
-                    ESC
-                  </kbd>
-                </DialogClose>
-              </DialogTitle>
-            </DialogHeader>
+        {/* Search Section - Hidden on mobile when showing filters */}
+        <div className={`flex-1 ${showFilters ? "hidden md:block" : "block"}`}>
+          <DialogHeader className="border-b">
+            <DialogTitle className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden h-9 w-10 ml-2"
+                onClick={() => setShowFilters(true)}
+              >
+                <Filter className="h-4 w-4" />
+                {totalFiltersApplied > 0 && (
+                  <span className="absolute -top-2 -left-2 h-4 w-4 rounded-full bg-primary text-[10px] text-primary-foreground flex items-center justify-center">
+                    {totalFiltersApplied}
+                  </span>
+                )}
+              </Button>
+              <Input
+                ref={inputRef}
+                placeholder="Search"
+                className="border-none rounded-md h-10 text-[16px]"
+                value={searchTerm}
+                onChange={handleSearch}
+              />
 
-            <div className="h-[360px] overflow-auto">
-              {isLoading || pending ? (
-                <div className="w-full h-full flex items-center justify-center">
-                  <Loader size={"lg"} />
-                </div>
-              ) : searchTerm && results.length == 0 ? (
-                <div className="w-full h-full flex items-center justify-center">
-                  No results found
-                </div>
-              ) : (
-                <List
-                  ref={listRef}
-                  height={360}
-                  itemCount={searchTerm ? results.length : filteredItems.length}
-                  itemSize={40}
-                  width="100%"
-                >
-                  {renderRow}
-                </List>
-              )}
-            </div>
+              <DialogClose className="absolute right-2 top-2">
+                <kbd className="pointer-events-none inline-flex h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+                  ESC
+                </kbd>
+              </DialogClose>
+            </DialogTitle>
+          </DialogHeader>
+
+          <div className="h-[370px] overflow-auto">
+            {isLoading || pending ? (
+              <div className="w-full h-full flex items-center justify-center">
+                <Loader size={"lg"} />
+              </div>
+            ) : (searchTerm && results.length == 0) ||
+              filteredItems.length == 0 ? (
+              <div className="w-full h-full flex items-center justify-center">
+                No results found
+              </div>
+            ) : (
+              <List
+                ref={listRef}
+                height={370}
+                itemCount={searchTerm ? results.length : filteredItems.length}
+                itemSize={40}
+                width="100%"
+              >
+                {renderRow}
+              </List>
+            )}
           </div>
         </div>
       </DialogContent>

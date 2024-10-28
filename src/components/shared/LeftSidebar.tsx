@@ -19,16 +19,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from "@/components/ui/dropdown-menu"
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useUserContext } from "@/context/AuthContext"
+import { Switch } from "../ui/switch"
+import { useTheme } from "../providers/theme-provider"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
+import { Button } from "../ui/button"
 
 const mainLinks = [
   {
@@ -50,6 +48,7 @@ const calculatorsLinks = [
 
 const LeftSidebar = () => {
   const { user } = useUserContext()
+  const { theme, setTheme } = useTheme()
   const { mutate: signOut, isSuccess } = useSignOutAccount()
 
   const navigate = useNavigate()
@@ -105,11 +104,11 @@ const LeftSidebar = () => {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild className="h-12">
+            <Popover>
+              <PopoverTrigger asChild className="h-12">
                 <SidebarMenuButton>
                   <User2 className="!size-6" />
-                  <div className="flex flex-col">
+                  <div className="flex flex-col *:hover:text-color-button-text">
                     <span className="text-[16px]">{user.name}</span>
                     <span className="text-xs text-color-text-tertiary">
                       {user.email}
@@ -117,16 +116,28 @@ const LeftSidebar = () => {
                   </div>
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
+              </PopoverTrigger>
+              <PopoverContent
                 side="right"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem onClick={() => signOut()}>
+                <div className="flex items-center gap-2 py-1">
+                  <Switch
+                    checked={theme === "dark"}
+                    onCheckedChange={() =>
+                      setTheme(theme === "dark" ? "light" : "dark")
+                    }
+                  />
+                  <span className="text-[16px]">Light/Dark theme</span>
+                </div>
+                <Button
+                  onClick={() => signOut()}
+                  className="w-full text-color-button-text bg-color-button-bg hover:bg-color-button-hover text-start flex justify-start mt-2"
+                >
                   <span className="text-[16px]">Sign out</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                </Button>
+              </PopoverContent>
+            </Popover>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
