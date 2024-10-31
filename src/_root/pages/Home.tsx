@@ -1,15 +1,13 @@
 import BiomesSlider from "@/components/shared/BiomesSlider"
-import Features from "@/components/shared/Features"
 import Hero from "@/components/shared/Hero"
 import Loader from "@/components/shared/Loader"
-import QuickTools from "@/components/shared/QuickTools"
 import {
   useGetBiomes,
   useGetItems,
 } from "@/lib/react-query/queriesAndMutations"
 
 const Home = () => {
-  const { data: items, isLoading: isItemsLoading } = useGetItems()
+  const { isLoading: isItemsLoading } = useGetItems()
   const { data: biomes, isLoading: isBiomesLoading } = useGetBiomes()
 
   return isItemsLoading || isBiomesLoading ? (

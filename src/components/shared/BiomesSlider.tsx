@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react"
+import React, { useState, useEffect } from "react"
 import { Card, CardContent } from "../ui/card"
 import {
   Carousel,
@@ -10,9 +10,8 @@ import {
 } from "../ui/carousel"
 import VignetteImage from "./VignetteImage"
 import { IBiome } from "@/types"
-import { Button } from "../ui/button"
 import { Link } from "react-router-dom"
-import { ExternalLink, Shield } from "lucide-react"
+import { Shield } from "lucide-react"
 
 interface BiomesSliderProps {
   data: { total: number; biomes: IBiome[] }

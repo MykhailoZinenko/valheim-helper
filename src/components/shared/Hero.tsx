@@ -1,4 +1,3 @@
-import React from "react"
 import Search from "./Search"
 import { Hammer } from "lucide-react"
 

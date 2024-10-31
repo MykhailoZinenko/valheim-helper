@@ -21,7 +21,7 @@ const ItemsTest = () => {
             Explore items
           </h2>
           <ol className="font-mono list-decimal list-inside w-full text-left mt-4">
-            {data.items?.map((item: IItem) => (
+            {data?.items?.map((item: IItem) => (
               <li key={item.id}>
                 <img src={item.icon} />{" "}
                 <Link to={`/item/${item.id}`}>{item.name}</Link>{" "}

@@ -1,5 +1,4 @@
-import React from "react"
-import { Card, CardContent, CardTitle } from "../ui/card"
+import { Card, CardContent } from "../ui/card"
 import { Button } from "../ui/button"
 
 const Features = ({ itemsLength }: { itemsLength: number }) => {

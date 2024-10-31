@@ -1,19 +1,9 @@
-import React, { useState } from "react"
-import {
-  Search,
-  Settings,
-  Database,
-  Apple,
-  Code,
-  ChevronUp,
-  ChevronDown,
-  Copy,
-} from "lucide-react"
+import { useState } from "react"
+import { Search, Database, ChevronUp, ChevronDown, Copy } from "lucide-react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 
 const Homepage = () => {
   const [showResourceResults, setShowResourceResults] = useState(false)
-  const [showFoodResults, setShowFoodResults] = useState(false)
   const [selectedTheme, setSelectedTheme] = useState("dark")
   const [selectedColor, setSelectedColor] = useState("blue")
 

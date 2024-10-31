@@ -74,8 +74,6 @@ const Feedback = () => {
 
       form.reset()
       setStep(1)
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast({
         variant: "destructive",
