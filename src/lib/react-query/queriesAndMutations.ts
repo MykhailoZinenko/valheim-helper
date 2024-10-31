@@ -7,7 +7,7 @@ import {
 } from "../appwrite/api"
 import { INewUser } from "@/types"
 import { QUERY_KEYS } from "./queryKeys"
-import { getAllItems, getItemById } from "../valheim-helper/api"
+import { getAllBiomes, getAllItems, getItemById } from "../valheim-helper/api"
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -74,5 +74,12 @@ export const useGetItemByIdMutation = () => {
 
       throw new Error("Item not found")
     }, 
+  })
+}
+
+export const useGetBiomes = () => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_BIOMES],
+    queryFn: getAllBiomes,
   })
 }

@@ -10,4 +10,8 @@ export enum QUERY_KEYS {
   // ITEM KEYS
   GET_ITEMS = "getItems",
   GET_ITEM_BY_ID = "getItemById",
+
+  // BIOMES KEYS
+  GET_BIOMES = "getBiomes",
+  GET_BIOME_BY_ID = "getBiomeById",
 }

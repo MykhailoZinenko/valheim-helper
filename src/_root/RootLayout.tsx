@@ -6,27 +6,26 @@ import { Outlet } from "react-router-dom"
 
 const RootLayout = () => {
   return (
-    <SidebarProvider className="mx-auto bg-color-primary-bg max-w-screen-xl">
-      {" "}
-      <div className="w-full flex bg-color-primary-bg">
+    <div className="relative w-full max-w-screen-xl xl:max-w-screen-2xl">
+      <SidebarProvider>
+        {" "}
         <LeftSidebar />
-
         <section className="w-full flex flex-col items-center">
-          <div className="w-full xl:w-fit xl:self-end flex justify-between xl:justify-end p-2 xl:pl-0 sticky xl:fixed top-0 bg-color-primary-bg">
+          <div className="w-full 2xl:w-fit 2xl:self-end flex justify-between 2xl:justify-end p-2 2xl:pl-0 sticky 2xl:fixed top-0 bg-color-primary-bg">
             <SidebarTrigger className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover" />
 
             <div className="flex space-x-2">
               <Feedback />
-              <Search />
+              <Search variant="dialog" />
             </div>
           </div>
 
-          <div className="w-full h-full p-12 pt-7 xl:pr-[104px] xl:pt-6 max-w-5xl">
+          <div className="w-full h-full p-12 pt-4 2xl:pt-6">
             <Outlet />
           </div>
         </section>
-      </div>
-    </SidebarProvider>
+      </SidebarProvider>
+    </div>
   )
 }
 

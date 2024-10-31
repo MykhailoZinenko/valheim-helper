@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <!-- Norse knot pattern -->
+  <pattern id="norse-knot" width="50" height="50" patternUnits="userSpaceOnUse">
+    <!-- Basic interwoven line pattern -->
+    <path d="M0,25 C10,25 15,0 25,0 C35,0 40,25 50,25 C60,25 65,0 75,0 C85,0 90,25 100,25" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2"
+          stroke-linecap="round"/>
+    <path d="M0,25 C10,25 15,50 25,50 C35,50 40,25 50,25 C60,25 65,50 75,50 C85,50 90,25 100,25" 
+          fill="none" 
+          stroke="currentColor" 
+          stroke-width="2"
+          stroke-linecap="round"/>
+    
+    <!-- Decorative elements -->
+    <circle cx="25" cy="25" r="3" fill="currentColor"/>
+    <circle cx="75" cy="25" r="3" fill="currentColor"/>
+  </pattern>
+  
+  <!-- Apply the pattern -->
+  <rect width="100" height="100" fill="url(#norse-knot)"/>
+</svg>

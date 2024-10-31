@@ -42,6 +42,13 @@ export type IItem = {
   station: StationType
 }
 
+export type IBiome = {
+  name: Biome
+  description: string
+  bosses: Partial<IItem>[]
+  imageUrl: string
+}
+
 export type ItemGroup =
   | 'ashtree'
   | 'banner' | 'bed' | 'beech' | 'berry' | 'birch' | 'bird' | 'blob'

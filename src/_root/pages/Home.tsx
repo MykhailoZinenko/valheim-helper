@@ -1,36 +1,28 @@
+import BiomesSlider from "@/components/shared/BiomesSlider"
+import Features from "@/components/shared/Features"
+import Hero from "@/components/shared/Hero"
 import Loader from "@/components/shared/Loader"
-import { useGetItems } from "@/lib/react-query/queriesAndMutations"
-import { IItem } from "@/types"
-import { Link } from "react-router-dom"
+import QuickTools from "@/components/shared/QuickTools"
+import {
+  useGetBiomes,
+  useGetItems,
+} from "@/lib/react-query/queriesAndMutations"
 
 const Home = () => {
-  const { data, isLoading } = useGetItems()
+  const { data: items, isLoading: isItemsLoading } = useGetItems()
+  const { data: biomes, isLoading: isBiomesLoading } = useGetBiomes()
 
-  return (
-    <div className="w-full h-full">
-      {isLoading ? (
-        <div className="w-full h-full flex items-center justify-center">
-          <Loader size="lg" />
-        </div>
-      ) : (
-        <>
-          <h1 className="text-5xl font-norse font-bold text-color-text-primary">
-            Valheim helper
-          </h1>
-          <h2 className="text-3xl mt-2 font-norse text-color-text-secondary">
-            Explore items
-          </h2>
-          <ol className="font-mono list-decimal list-inside w-full text-left mt-4">
-            {data.items?.map((item: IItem) => (
-              <li key={item.id}>
-                <img src={item.icon} />{" "}
-                <Link to={`/item/${item.id}`}>{item.name}</Link>{" "}
-                {" " + item.type}
-              </li>
-            ))}
-          </ol>
-        </>
-      )}
+  return isItemsLoading || isBiomesLoading ? (
+    <div className="w-full h-full flex items-center justify-center">
+      <Loader size="lg" />
+    </div>
+  ) : (
+    <div className="w-full h-full text-color-text-primary">
+      {/* Hero Section */}
+      <Hero />
+      {/* <QuickTools /> */}
+      <BiomesSlider data={biomes ?? { total: 0, biomes: [] }} />
+      {/* <Features itemsLength={items?.total} /> */}
     </div>
   )
 }

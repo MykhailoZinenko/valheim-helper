@@ -9,10 +9,13 @@ import Item from "./_root/pages/Item"
 import ResourceCalculator from "./_root/pages/ResourceCalculator"
 import About from "./_root/pages/About"
 import Settings from "./_root/pages/Settings"
+import ItemsTest from "./_root/pages/ItemsTest"
+import Biome from "./_root/pages/Biome"
+import Homepage from "./_root/pages/Page"
 
 function App() {
   return (
-    <main className="flex m-h-screen">
+    <main className="m-h-screen flex justify-center">
       <Routes>
         {/*public routes*/}
         <Route element={<AuthLayout />}>
@@ -23,8 +26,11 @@ function App() {
         {/*private routes */}
         <Route element={<RootLayout />}>
           <Route index element={<Home />} />
+          <Route path="/home" element={<Homepage />} />
+          <Route path="/test-items" element={<ItemsTest />} />
           <Route path="/about" element={<About />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/biome/:id" element={<Biome />} />
           <Route path="/item/:id" element={<Item />}>
             <Route path="/item/:id/:level" element={<Item />}></Route>
           </Route>

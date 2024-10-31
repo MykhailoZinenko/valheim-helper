@@ -9,7 +9,7 @@ export const filters = {
     "building",
     "creature",
     "effect",
-    "fishe",
+    "fish",
     "object",
     "resource",
     "spawner",
