@@ -1,8 +1,20 @@
+import Calculator from "@/components/shared/Calculator"
+import Loader from "@/components/shared/Loader"
+import { useGetCalculatorItems } from "@/lib/react-query/queriesAndMutations"
+
 const ResourceCalculator = () => {
+  const { data, isPending, isError } = useGetCalculatorItems()
+
   return (
-    <div>
-      <h1 className="text-5xl font-norse font-bold">Resource Calculator</h1>
-    </div>
+    <>
+      {isPending || isError ? (
+        <div className="w-full h-full flex items-center justify-center">
+          <Loader size="lg" />
+        </div>
+      ) : (
+        <Calculator name="resource" data={data} />
+      )}
+    </>
   )
 }
 

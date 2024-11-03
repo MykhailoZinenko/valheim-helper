@@ -90,3 +90,76 @@ export async function signOutAccount() {
     console.log(error)
   }
 }
+
+export async function getUserCalculations(userId: string, name: string) {
+  try {
+    const userCalculations = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.calculationCollectionId,
+      [Query.equal("creator", userId), Query.orderDesc("$createdAt"), Query.equal("type", name)],
+      
+    )
+
+    console.log("api call", userId, userCalculations)
+
+    if (!userCalculations) throw Error
+
+    return userCalculations
+  } catch (error) {
+    console.log(error)
+  }
+} 
+
+export async function postCalculation(userId: string, type: string, calculation: any) {
+    try {
+        if (!['food', 'resource'].includes(type)) {
+            throw new Error("Invalid calculation type. Must be 'food' or 'resource'.");
+        }
+
+        const itemIds = await Promise.all(calculation.map(async (item: any) => {
+            const itemDocument = await databases.createDocument(
+                appwriteConfig.databaseId,               
+                appwriteConfig.itemCollectionId,       
+                ID.unique(),                    
+                {
+                    name: item.name,
+                    quantity: item.quantity
+                }
+            );
+            return itemDocument.$id; 
+        }));
+
+        const calculationDocument = await databases.createDocument(
+            appwriteConfig.databaseId,                    
+            appwriteConfig.calculationCollectionId,     
+            ID.unique(),                         
+            {
+                creator: userId,                    
+                type: type,                     
+                items: itemIds                  
+            }
+        );
+
+        console.log("Calculation created successfully:", calculationDocument);
+        return calculationDocument;
+    } catch (error) {
+        console.error("Error creating calculation:", error);
+        throw error;
+    }
+}
+
+export async function deleteCalculation(calculationId: string) {
+  try {
+      console.log(appwriteConfig.databaseId, appwriteConfig.calculationCollectionId, calculationId)
+        const response = await databases.deleteDocument(
+            appwriteConfig.databaseId,                    
+            appwriteConfig.calculationCollectionId,     
+            calculationId
+        );
+        console.log("Calculation deleted successfully:", response);
+        return response;
+    } catch (error) {
+        console.error("Error deleting calculation:", error);
+        throw error;
+    }
+}

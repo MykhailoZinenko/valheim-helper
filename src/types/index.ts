@@ -42,6 +42,18 @@ export type IItem = {
   station: StationType
 }
 
+type Recipe = any
+
+type FoodStats = {
+    health: number
+    stamina: number
+    eitr?: number
+    duration: number
+    regen: number
+}
+
+export type IFood = IItem & {stats: FoodStats, recipe: Recipe}
+
 export type IBiome = {
   name: Biome
   description: string

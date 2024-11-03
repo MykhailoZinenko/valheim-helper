@@ -1,4 +1,4 @@
-import { IBiome, IItem } from "@/types";
+import { IBiome, IFood, IItem } from "@/types";
 import { valheimHelperApiConfig } from "./config";
 
 const API_URL = valheimHelperApiConfig.url; 
@@ -61,6 +61,48 @@ export const getAllBiomes: () => Promise<{ total: number; biomes: IBiome[] }> = 
         if (!data) {
             throw new Error("No biomes found");
         }        
+
+        return data;
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+export const getAllFood: () => Promise<{ total: number; items: IFood[] }> = async () => {
+    try {
+        const response = await fetch(`${API_URL}/api/food`);
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch food");
+        }
+
+        const data = await response.json();
+
+        if (!data) {
+            throw new Error("No food found");
+        }
+
+        return data;
+    } catch (error) {
+        console.log(error)
+        return error
+    }
+}
+
+export const getCalculatorItems: () => Promise<any> = async () => {
+    try {
+        const response = await fetch(`${API_URL}/api/items/calculator`);
+
+        if (!response.ok) {
+            throw new Error("Failed to fetch calculator items");
+        }
+
+        const data = await response.json();
+
+        if (!data) {
+            throw new Error("No calculator items found");
+        }
 
         return data;
     } catch (error) {

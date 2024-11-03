@@ -42,9 +42,9 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
       {/* Main Carousel */}
       <Carousel
         setApi={setCarouselApi}
-        className="w-full grid grid-cols-[auto_1fr_auto] gap-4"
+        className="w-full grid sm:grid-cols-[auto_1fr_auto] gap-4"
       >
-        <CarouselPrevious className="relative left-0 h-12 w-12 border-2 border-accent/20 hover:border-accent/50 transition-colors" />
+        <CarouselPrevious className="relative left-0 h-12 w-12 border-2 border-accent/20 hover:border-accent/50 transition-colors hidden sm:flex" />
         <CarouselContent className="-m-0.5">
           {data.biomes.map((biome, index) => (
             <CarouselItem key={index} className="p-1">
@@ -113,7 +113,7 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselNext className="relative right-0 h-12 w-12 border-2 border-accent/20 hover:border-accent/50 transition-colors" />
+        <CarouselNext className="relative right-0 h-12 w-12 border-2 border-accent/20 hover:border-accent/50 transition-colors hidden sm:flex" />
       </Carousel>
 
       {/* Pagination Indicators */}

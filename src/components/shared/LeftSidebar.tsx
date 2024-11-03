@@ -1,4 +1,5 @@
 import {
+  AppleIcon,
   CalculatorIcon,
   ChevronUp,
   HomeIcon,
@@ -42,7 +43,12 @@ const calculatorsLinks = [
   {
     name: "Resource",
     icon: <CalculatorIcon />,
-    path: "/resource-calculator",
+    path: "/calculators/resource",
+  },
+  {
+    name: "Food",
+    icon: <AppleIcon />,
+    path: "/calculators/food",
   },
 ]
 

@@ -12,6 +12,7 @@ import Settings from "./_root/pages/Settings"
 import ItemsTest from "./_root/pages/ItemsTest"
 import Biome from "./_root/pages/Biome"
 import Homepage from "./_root/pages/Page"
+import FoodCalculator from "./_root/pages/FoodCalculator"
 
 function App() {
   return (
@@ -34,7 +35,13 @@ function App() {
           <Route path="/item/:id" element={<Item />}>
             <Route path="/item/:id/:level" element={<Item />}></Route>
           </Route>
-          <Route path="/resource-calculator" element={<ResourceCalculator />} />
+          <Route path="/calculators">
+            <Route
+              path="/calculators/resource"
+              element={<ResourceCalculator />}
+            />
+            <Route path="/calculators/food" element={<FoodCalculator />} />
+          </Route>
         </Route>
       </Routes>
 

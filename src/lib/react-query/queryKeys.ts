@@ -14,4 +14,12 @@ export enum QUERY_KEYS {
   // BIOMES KEYS
   GET_BIOMES = "getBiomes",
   GET_BIOME_BY_ID = "getBiomeById",
+
+  // FOOD KEYS
+  GET_FOOD = "getFood",
+  GET_FOOD_BY_ID = "getFoodById",
+
+  // CALCULATIONS KEYS
+  GET_CALCULATOR_ITEMS = "getCalculatorItems",
+  GET_USER_CALCULATIONS = "getCalculations",
 }
