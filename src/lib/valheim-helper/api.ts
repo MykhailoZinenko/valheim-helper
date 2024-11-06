@@ -1,4 +1,4 @@
-import { IBiome, IFood, IItem } from "@/types";
+import { IBiome, IRecipeItem, IFood, IItem } from "@/types";
 import { valheimHelperApiConfig } from "./config";
 
 const API_URL = valheimHelperApiConfig.url; 
@@ -90,7 +90,7 @@ export const getAllFood: () => Promise<{ total: number; items: IFood[] }> = asyn
     }
 }
 
-export const getCalculatorItems: () => Promise<any> = async () => {
+export const getCalculatorItems: () => Promise<{ total: number;  items: IRecipeItem[] }> = async () => {
     try {
         const response = await fetch(`${API_URL}/api/items/calculator`);
 
@@ -103,6 +103,8 @@ export const getCalculatorItems: () => Promise<any> = async () => {
         if (!data) {
             throw new Error("No calculator items found");
         }
+
+        console.log("c_data", data)
 
         return data;
     } catch (error) {

@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useGetFood } from "@/lib/react-query/queriesAndMutations"
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef, Row } from "@tanstack/react-table"
 import DataTable from "@/components/shared/DataTable"
 import Loader from "@/components/shared/Loader"
 import { Button } from "@/components/ui/button"
@@ -8,11 +8,13 @@ import { ArrowUpDown, CopyIcon } from "lucide-react"
 import { toast } from "@/hooks/use-toast"
 import Calculator from "../../components/shared/Calculator"
 
+type Item = {
+  icon: string
+  name: string
+}
+
 type Food = {
-  item: {
-    icon: string
-    name: string
-  }
+  item: Item
   health: number
   stamina: number
   eitr?: number
@@ -20,8 +22,12 @@ type Food = {
   regen: number
 }
 
-const itemNameFilter = (row: any, columnId: any, filterValue: any) => {
-  const item = row.getValue(columnId)
+const itemNameFilter = (
+  row: Row<Food>,
+  columnId: string,
+  filterValue: string
+) => {
+  const item: Item = row.getValue(columnId)
   return item.name.toLowerCase().includes(filterValue.toLowerCase())
 }
 
@@ -39,11 +45,15 @@ const columns: ColumnDef<Food>[] = [
         </Button>
       )
     },
-    cell: ({ row }: { row: any }) => {
+    cell: ({ row }: { row: Row<Food> }) => {
       return (
         <div className="flex items-center gap-2 text-nowrap">
-          <img src={row.getValue("item").icon} height={32} width={32} />
-          {row.getValue("item").name}
+          <img
+            src={(row.getValue("item") as Item).icon}
+            height={32}
+            width={32}
+          />
+          {(row.getValue("item") as Item).name}
         </div>
       )
     },
@@ -179,7 +189,7 @@ const FoodCalculator = () => {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="0">
-              <Calculator name="food" data={data} />
+              <Calculator name="food" data={data.items} />
             </TabsContent>
             <TabsContent value="1">
               <div className="mt-6">

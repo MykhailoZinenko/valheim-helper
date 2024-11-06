@@ -52,7 +52,8 @@ type FoodStats = {
     regen: number
 }
 
-export type IFood = IItem & {stats: FoodStats, recipe: Recipe}
+export type IRecipeItem = IItem & { recipe: Recipe }
+export type IFood = IRecipeItem & { stats: FoodStats }
 
 export type IBiome = {
   name: Biome

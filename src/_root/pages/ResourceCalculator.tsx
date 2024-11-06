@@ -12,7 +12,7 @@ const ResourceCalculator = () => {
           <Loader size="lg" />
         </div>
       ) : (
-        <Calculator name="resource" data={data} />
+        <Calculator name="resource" data={data.items} />
       )}
     </>
   )

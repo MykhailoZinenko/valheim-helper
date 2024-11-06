@@ -19,16 +19,31 @@ import {
   Save,
   RefreshCw,
   Trash2,
+  InfoIcon,
 } from "lucide-react"
+import { Checkbox } from "../ui/checkbox"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip"
+import { IRecipeItem, IFood } from "@/types"
+import { StarFilledIcon } from "@radix-ui/react-icons"
 
 const Calculator = ({
   name,
   data,
+  isCompact = false,
 }: {
   name: "food" | "resource"
-  data: any
+  data: IRecipeItem[]
+  isCompact?: boolean
 }) => {
   // State management
+  const [autoDelete, setAutoDelete] = useState(
+    JSON.parse(localStorage.getItem(`auto-delete`) ?? "false")
+  )
   const [itemNames, setItemNames] = useState<
     { name: string; quantity: number }[]
   >(JSON.parse(localStorage.getItem(`${name}-calculator-item-names`) ?? "[]"))
@@ -36,6 +51,10 @@ const Calculator = ({
   const [materials, setMaterials] = useState<
     { name: string; quantity: number }[]
   >(JSON.parse(localStorage.getItem(`${name}-calculator-materials`) ?? "[]"))
+
+  const [workbenches, setWorkbenches] = useState<
+    { name: string; level: number }[]
+  >(JSON.parse(localStorage.getItem(`${name}-calculator-workbenches`) ?? "[]"))
 
   const { user } = useUserContext()
   const {
@@ -62,9 +81,7 @@ const Calculator = ({
 
       if (itemNames.length > 0) {
         itemNames.forEach((item) => {
-          const foundItem = data.items.find((i: any) => i.name === item.name)
-
-          console.log(foundItem.recipe)
+          const foundItem = data.find((i: IRecipeItem) => i.name === item.name)
 
           if (foundItem && foundItem.recipe) {
             console.log("recipe", foundItem.recipe)
@@ -82,8 +99,7 @@ const Calculator = ({
                   material.quantity += (value as number) * item.quantity
                 } else {
                   materials.push({
-                    name:
-                      items.items.find((item) => item.id === key)?.name || key,
+                    name: materialItem?.name || key,
                     quantity: (value as number) * item.quantity,
                   })
                 }
@@ -110,6 +126,46 @@ const Calculator = ({
 
       return materials
     })
+
+    setWorkbenches(() => {
+      const workbenches: { name: string; level: number }[] = []
+
+      if (itemNames.length > 0) {
+        itemNames.forEach((item) => {
+          const foundItem = data.find((i: IRecipeItem) => i.name === item.name)
+
+          if (foundItem && foundItem.recipe?.source) {
+            const workbenchItem = items.items.find(
+              (item) => item.id === foundItem.recipe.source.station
+            )
+            const workbench = workbenches.find(
+              (workbench) =>
+                workbench.name ===
+                (workbenchItem?.name || foundItem.recipe.source.station)
+            )
+
+            if (workbench) {
+              workbench.level = Math.max(
+                workbench.level,
+                foundItem.recipe.source.level
+              )
+            } else {
+              workbenches.push({
+                name: workbenchItem?.name || foundItem.recipe.source.station,
+                level: foundItem.recipe.source.level,
+              })
+            }
+          }
+        })
+      }
+
+      localStorage.setItem(
+        `${name}-calculator-workbenches`,
+        JSON.stringify(workbenches)
+      )
+
+      return workbenches
+    })
   }, [itemNames, data, items])
 
   // Handler functions
@@ -127,6 +183,19 @@ const Calculator = ({
   }
 
   const handleSave = async () => {
+    if (calculations?.documents && calculations?.documents.length >= 10) {
+      if (autoDelete) {
+        console.log(calculations?.documents)
+        await deleteCalculation(calculations.documents.at(-1)!.$id)
+      } else {
+        toast({
+          title: "Error",
+          description: "Cannot save more than 10 calculations",
+          variant: "destructive",
+        })
+        return
+      }
+    }
     try {
       const result = await postCalculation({
         userId: user.id,
@@ -210,7 +279,7 @@ const Calculator = ({
             <div className="relative group">
               <div className="absolute -inset-1 bg-gradient-to-r from-accent/20 via-accent/30 to-accent/20 rounded-lg blur opacity-75 group-hover:opacity-100 transition duration-1000" />
               <div className="relative">
-                <ItemsCombobox data={data.items} setItems={setItemNames} />
+                <ItemsCombobox data={data} setItems={setItemNames} />
               </div>
             </div>
           </div>
@@ -237,7 +306,8 @@ const Calculator = ({
                   >
                     <img
                       src={
-                        data.items.find((f: any) => f.name === item.name)?.icon
+                        data.find((f: IRecipeItem) => f.name === item.name)
+                          ?.icon
                       }
                       height={32}
                       width={32}
@@ -287,6 +357,33 @@ const Calculator = ({
 
             {/* Required Materials */}
             <div className="space-y-4">
+              <h3 className="text-2xl font-norse font-bold mb-4">
+                Required Workbenches
+              </h3>
+              {workbenches.map((workbench) =>
+                workbench.level <= 0 ? null : (
+                  <div
+                    key={workbench.name}
+                    className="flex items-center gap-3 p-2 px-4 bg-color-secondary-bg/50 rounded-lg border border-accent/10 transition-all duration-300 h-[54px]"
+                  >
+                    <img
+                      src={
+                        items.items.find((f) => f.name === workbench.name)?.icon
+                      }
+                      height={32}
+                      width={32}
+                      className="rounded-md"
+                    />
+                    <span className="font-medium text-color-text-primary">
+                      {workbench.name}
+                    </span>
+                    <span className="ml-auto font-bold text-accent">
+                      {workbench.level}
+                      <StarFilledIcon />
+                    </span>
+                  </div>
+                )
+              )}
               <h3 className="text-2xl font-norse font-bold mb-4">
                 Required Materials
               </h3>
@@ -340,6 +437,39 @@ const Calculator = ({
             <h2 className="text-2xl font-norse font-bold">
               Calculation History
             </h2>
+            <div className="flex items-center space-x-2 mb-1 ml-auto">
+              <Checkbox
+                id="auto-delete"
+                onCheckedChange={() => {
+                  setAutoDelete(!autoDelete)
+                  localStorage.setItem(
+                    `auto-delete`,
+                    JSON.stringify(!autoDelete)
+                  )
+                }}
+              />
+              <label
+                htmlFor="auto-delete"
+                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 hidden sm:block"
+              >
+                Auto delete oldest calculation
+              </label>
+              <label
+                htmlFor="auto-delete"
+                className="block sm:hidden text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              >
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <InfoIcon className="w-5 h-5 text-accent" />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Auto delete oldest calculation</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </label>
+            </div>
           </div>
 
           <div className="space-y-6">
