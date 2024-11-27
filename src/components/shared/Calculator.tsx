@@ -28,13 +28,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip"
-import { IRecipeItem, IFood } from "@/types"
+import { IRecipeItem } from "@/types"
 import { StarFilledIcon } from "@radix-ui/react-icons"
 
 const Calculator = ({
   name,
   data,
-  isCompact = false,
 }: {
   name: "food" | "resource"
   data: IRecipeItem[]
