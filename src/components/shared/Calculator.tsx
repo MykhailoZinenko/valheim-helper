@@ -377,7 +377,7 @@ const Calculator = ({
                     <span className="font-medium text-color-text-primary">
                       {workbench.name}
                     </span>
-                    <span className="ml-auto font-bold text-accent">
+                    <span className="ml-auto font-bold text-accent flex gap-1 items-center">
                       {workbench.level}
                       <StarFilledIcon />
                     </span>

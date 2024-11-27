@@ -1,10 +1,12 @@
-export type IContextType = {
-  user: IUser
-  isLoading: boolean
-  setUser: React.Dispatch<React.SetStateAction<IUser>>
-  isAuthenticated: boolean
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
-  checkAuthUser: () => Promise<boolean>
+export interface IContextType {
+  user: IUser;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  apiKey: string | null; // Add this
+  setUser: (user: IUser) => void;
+  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  checkAuthUser: () => Promise<boolean>;
+  createApiKey: () => Promise<string | null>; // Add this
 }
 
 export type INavLink = {
@@ -22,6 +24,7 @@ export type IUser = {
   id: string
   name: string
   email: string
+  apiKey?: string
 }
 
 export type INewUser = {
@@ -52,6 +55,7 @@ type FoodStats = {
     regen: number
 }
 
+export type IFullItem = {item: any, recipe: Recipe}
 export type IRecipeItem = IItem & { recipe: Recipe }
 export type IFood = IRecipeItem & { stats: FoodStats }
 
@@ -61,6 +65,8 @@ export type IBiome = {
   bosses: Partial<IItem>[]
   imageUrl: string
 }
+
+export type IBiomeExtended = IBiome & { creatures: any[],  }
 
 export type ItemGroup =
   | 'ashtree'

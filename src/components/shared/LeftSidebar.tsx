@@ -53,7 +53,7 @@ const calculatorsLinks = [
 ]
 
 const LeftSidebar = () => {
-  const { user } = useUserContext()
+  const { user, apiKey, createApiKey } = useUserContext()
   const { theme, setTheme } = useTheme()
   const { mutate: signOut, isSuccess } = useSignOutAccount()
 
@@ -136,6 +136,24 @@ const LeftSidebar = () => {
                   />
                   <span className="text-[16px]">Light/Dark theme</span>
                 </div>
+
+                <div className="flex flex-col gap-2 py-1">
+                  <Button
+                    onClick={createApiKey}
+                    className="w-full text-color-button-text bg-color-button-bg hover:bg-color-button-hover"
+                  >
+                    {apiKey ? "Regenerate API Key" : "Create API Key"}
+                  </Button>
+
+                  {apiKey && (
+                    <div className="p-2 bg-muted rounded-md">
+                      <span className="text-xs font-mono break-all">
+                        {apiKey}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
                 <Button
                   onClick={() => signOut()}
                   className="w-full text-color-button-text bg-color-button-bg hover:bg-color-button-hover text-start flex justify-start mt-2"

@@ -8,9 +8,9 @@ import {
   signInAccount,
   signOutAccount,
 } from "../appwrite/api"
-import { INewUser } from "@/types"
+import { Biome, INewUser } from "@/types"
 import { QUERY_KEYS } from "./queryKeys"
-import { getAllBiomes, getAllFood, getAllItems, getCalculatorItems, getItemById } from "../valheim-helper/api"
+import { getAllBiomes, getAllFood, getAllItems, getBiomeById, getCalculatorItems, getItemById } from "../valheim-helper/api"
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -19,9 +19,14 @@ export const useCreateUserAccount = () => {
 }
 
 export const useSignInAccount = () => {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: (user: { email: string; password: string }) =>
       signInAccount(user),
+    onSuccess: () => {
+      queryClient.clear()
+    },
   })
 }
 
@@ -84,6 +89,13 @@ export const useGetBiomes = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_BIOMES],
     queryFn: getAllBiomes,
+  })
+}
+
+export const useGetBiomeById = (biomeId: Biome) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_BIOME_BY_ID],
+    queryFn: () => getBiomeById(biomeId),
   })
 }
 

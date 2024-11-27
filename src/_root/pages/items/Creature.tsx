@@ -1,6 +1,5 @@
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
-import { StarFilledIcon } from "@radix-ui/react-icons"
-import { Link, useParams } from "react-router-dom"
+import ItemHeader from "@/components/shared/ItemHeader"
+import { useParams } from "react-router-dom"
 
 const difficultyScaleMaxPlayers = 5
 const damageScalePerPlayer = 0.04
@@ -45,56 +44,12 @@ const Creature = ({ data }: { data: any }) => {
 
   return (
     <div>
-      <Tabs defaultValue={level.toString()}>
-        <div className="flex justify-between">
-          <div className="flex gap-2 items-center">
-            <img src={data.icon} className="aspect-square w-[65px]" />
-            <div>
-              <h1 className="text-5xl font-norse font-bold text-color-text-primary">
-                {data.name}
-              </h1>
-              <h2 className="text-2xl font-norse text-color-text-secondary">
-                {data.type}
-              </h2>
-            </div>
-          </div>
-
-          {data.spawners.length > 0 ? (
-            <TabsList>
-              {Array.from({
-                length: maxLevel,
-              }).map((_, i) => (
-                <Link
-                  key={i}
-                  to={`/item/${data.id}/${i}`}
-                  className="cursor-pointer"
-                >
-                  <TabsTrigger value={`${i}`}>
-                    <span>{i}</span>
-                    <StarFilledIcon className="ml-1" />
-                  </TabsTrigger>
-                </Link>
-              ))}
-            </TabsList>
-          ) : null}
-        </div>
-        {data.spawners.length > 0 ? (
-          <>
-            {Array.from({
-              length: maxLevel,
-            }).map((_, i) => (
-              <TabsContent key={i} value={`${i}`}>
-                <ul>
-                  <li>{data.hp * hpScale}</li>
-                  <li>
-                    {(data.attacks[0]?.attacks[0]?.dmg?.slash ?? 0) * dmgScale}
-                  </li>
-                </ul>
-              </TabsContent>
-            ))}
-          </>
-        ) : null}
-      </Tabs>
+      <ItemHeader data={data} maxLevel={maxLevel}>
+        <ul>
+          <li>{data.hp * hpScale}</li>
+          <li>{(data.attacks[0]?.attacks[0]?.dmg?.slash ?? 0) * dmgScale}</li>
+        </ul>
+      </ItemHeader>
     </div>
   )
 }
