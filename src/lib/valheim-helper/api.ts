@@ -47,29 +47,32 @@ async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   });
 }
 
-interface ApiKeyResponse {
+interface ApiKey {
+  $id: string;
   key: string;
+  name: string;
   created: string;
+  status: 'active' | 'revoked';
+  revokedAt?: string;
 }
 
-export async function createDeveloperApiKey(userId: string): Promise<string> {
+export async function createDeveloperApiKey(userId: string, name: string): Promise<ApiKey> {
   const response = await fetch(`${API_URL}/api/developer/keys`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ userId })
+    body: JSON.stringify({ userId, name })
   });
 
   if (!response.ok) {
     throw new Error('Failed to create API key');
   }
 
-  const data: ApiKeyResponse = await response.json();
-  return data.key;
+  return await response.json();
 }
 
-export async function getDeveloperApiKey(userId: string): Promise<string | null> {
+export async function getDeveloperApiKeys(userId: string): Promise<{ keysData: ApiKey[], userPlan: any }> {
   const response = await fetch(`${API_URL}/api/developer/keys`, {
     headers: {
       'Authorization': `User ${userId}`
@@ -78,15 +81,26 @@ export async function getDeveloperApiKey(userId: string): Promise<string | null>
 
   if (!response.ok) {
     if (response.status === 404) {
-      return null;
+      return { keysData: [], userPlan: {} } as { keysData: ApiKey[], userPlan: any };
     }
-    throw new Error('Failed to get API key');
+    throw new Error('Failed to get API keys');
   }
 
-  const data: ApiKeyResponse = await response.json();
-  return data.key;
+  return await response.json();
 }
 
+export async function revokeDeveloperApiKey(userId: string, keyId: string): Promise<void> {
+  const response = await fetch(`${API_URL}/api/developer/keys/${keyId}/revoke`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `User ${userId}`
+    }
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to revoke API key');
+  }
+}
 
 export const getAllItems: () => Promise<{ total: number; items: IItem[] }> = async () => {
     try {

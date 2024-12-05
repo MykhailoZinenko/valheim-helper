@@ -1,12 +1,29 @@
+export interface ApiKey {
+  $id: string;
+  key: string;
+  name: string;
+  created: string;
+  status: 'active' | 'revoked';
+  revokedAt?: string;
+}
+
+export interface IUser {
+  id: string;
+  name: string;
+  email: string;
+  apiKeys: {keysData: ApiKey[], userPlan: any };
+  plan: string;
+}
+
 export interface IContextType {
   user: IUser;
   isLoading: boolean;
   isAuthenticated: boolean;
-  apiKey: string | null; // Add this
-  setUser: (user: IUser) => void;
-  setIsAuthenticated: (isAuthenticated: boolean) => void;
+  setUser: React.Dispatch<React.SetStateAction<IUser>>;
+  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
   checkAuthUser: () => Promise<boolean>;
-  createApiKey: () => Promise<string | null>; // Add this
+  createApiKey: (name: string) => Promise<ApiKey | null>;
+  revokeApiKey: (keyId: string) => Promise<void>;
 }
 
 export type INavLink = {
@@ -18,13 +35,6 @@ export type INavLink = {
 export type IUpdateUser = {
   userId: string
   name: string
-}
-
-export type IUser = {
-  id: string
-  name: string
-  email: string
-  apiKey?: string
 }
 
 export type INewUser = {

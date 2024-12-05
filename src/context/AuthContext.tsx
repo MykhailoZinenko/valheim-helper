@@ -1,28 +1,46 @@
 import { getCurrentUser } from "@/lib/appwrite/api"
 import {
+  useCreateDeveloperKey,
+  useRevokeDeveloperKey,
+} from "@/lib/react-query/queriesAndMutations"
+import {
   createDeveloperApiKey,
-  getDeveloperApiKey,
+  getDeveloperApiKeys,
+  revokeDeveloperApiKey,
 } from "@/lib/valheim-helper/api"
 import { IContextType, IUser } from "@/types"
 import { createContext, useContext, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 
+interface ApiKey {
+  $id: string
+  key: string
+  name: string
+  created: string
+  status: "active" | "revoked"
+  revokedAt?: string
+}
+
 const INITIAL_USER = {
   id: "",
   name: "",
   email: "",
-  apiKey: "",
+  apiKeys: { keysData: [], userPlan: {} } as {
+    keysData: ApiKey[]
+    userPlan: any
+  },
+  plan: "",
 }
 
 const INITIAL_STATE = {
   user: INITIAL_USER,
   isLoading: false,
   isAuthenticated: false,
-  apiKey: null,
   setUser: () => {},
   setIsAuthenticated: () => {},
   checkAuthUser: async () => false as boolean,
-  createApiKey: async () => null as string | null,
+  createApiKey: async () => null as ApiKey | null,
+  revokeApiKey: async () => {},
 }
 
 const AuthContext = createContext<IContextType>(INITIAL_STATE)
@@ -31,29 +49,30 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<IUser>(INITIAL_USER)
   const [isLoading, setIsLoading] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
-  const [apiKey, setApiKey] = useState<string | null>(null)
 
   const navigate = useNavigate()
   const { pathname } = useLocation()
+
+  const { mutateAsync: createDeveloperApiKey } = useCreateDeveloperKey()
+  const { mutateAsync: revokeDeveloperApiKey } = useRevokeDeveloperKey()
 
   const checkAuthUser = async () => {
     try {
       const currentAccount = await getCurrentUser()
 
       if (currentAccount) {
-        // Get existing API key if any
-        const existingKey = await getDeveloperApiKey(currentAccount.$id)
+        // Get existing API keys if any
+        const existingKeys = await getDeveloperApiKeys(currentAccount.$id)
 
         setUser({
           id: currentAccount.$id,
           name: currentAccount.name,
           email: currentAccount.email,
-          apiKey: existingKey || undefined,
+          apiKeys: existingKeys,
+          plan: currentAccount.plan,
         })
 
-        setApiKey(existingKey)
         setIsAuthenticated(true)
-
         return true
       }
 
@@ -66,18 +85,48 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
-  const createApiKey = async () => {
+  const createApiKey = async (name: string) => {
     try {
       if (!user.id) return null
 
-      const newKey = await createDeveloperApiKey(user.id)
-      setApiKey(newKey)
-      setUser((prev) => ({ ...prev, apiKey: newKey }))
+      const newKey = await createDeveloperApiKey({ userId: user.id, name })
+      setUser((prev) => ({
+        ...prev,
+        apiKeys: {
+          keysData: [...prev.apiKeys.keysData, newKey],
+          userPlan: prev.apiKeys.userPlan,
+        },
+      }))
 
       return newKey
     } catch (error) {
       console.error("Failed to create API key:", error)
       return null
+    }
+  }
+
+  const revokeApiKey = async (keyId: string) => {
+    try {
+      if (!user.id) return
+
+      await revokeDeveloperApiKey({ userId: user.id, keyId })
+      setUser((prev) => ({
+        ...prev,
+        apiKeys: {
+          keysData: prev.apiKeys.keysData.map((key) =>
+            key.$id === keyId
+              ? {
+                  ...key,
+                  status: "revoked" as const,
+                  revokedAt: new Date().toISOString(),
+                }
+              : key
+          ),
+          userPlan: prev.apiKeys.userPlan,
+        },
+      }))
+    } catch (error) {
+      console.error("Failed to revoke API key:", error)
     }
   }
 
@@ -101,8 +150,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isAuthenticated,
     setIsAuthenticated,
     checkAuthUser,
-    apiKey,
     createApiKey,
+    revokeApiKey,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

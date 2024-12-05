@@ -7,6 +7,9 @@ export enum QUERY_KEYS {
   GET_USERS = "getUsers",
   GET_USER_BY_ID = "getUserById",
 
+  // API KEYS
+  GET_DEVELOPER_API_KEYS = "getDeveloperApiKeys",
+
   // ITEM KEYS
   GET_ITEMS = "getItems",
   GET_ITEM_BY_ID = "getItemById",
@@ -22,4 +25,5 @@ export enum QUERY_KEYS {
   // CALCULATIONS KEYS
   GET_CALCULATOR_ITEMS = "getCalculatorItems",
   GET_USER_CALCULATIONS = "getCalculations",
+  GET_DEVELOP_KEYS = "GET_DEVELOP_KEYS",
 }

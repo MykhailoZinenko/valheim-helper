@@ -19,15 +19,16 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { useSignOutAccount } from "@/lib/react-query/queriesAndMutations"
 import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { useUserContext } from "@/context/AuthContext"
-import { Switch } from "../ui/switch"
-import { useTheme } from "../providers/theme-provider"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Button } from "../ui/button"
+import SubscriptionPlan from "./SubscriptionPlan"
 
 const mainLinks = [
   {
@@ -39,7 +40,38 @@ const mainLinks = [
   { name: "Settings", icon: <SettingsIcon />, path: "/settings" },
 ]
 
-const calculatorsLinks = [
+const biomeLinks = [
+  {
+    name: "Meadows",
+    path: "/biome/Meadows",
+  },
+  {
+    name: "Black Forest",
+    path: "/biome/BlackForest",
+  },
+  {
+    name: "Swamp",
+    path: "/biome/Swamp",
+  },
+  {
+    name: "Mountain",
+    path: "/biome/Mountain",
+  },
+  {
+    name: "Plains",
+    path: "/biome/Plains",
+  },
+  {
+    name: "Mistlands",
+    path: "/biome/Mistlands",
+  },
+  {
+    name: "Ashlands",
+    path: "/biome/Ashlands",
+  },
+]
+
+const calculatorLinks = [
   {
     name: "Resource",
     icon: <CalculatorIcon />,
@@ -53,8 +85,7 @@ const calculatorsLinks = [
 ]
 
 const LeftSidebar = () => {
-  const { user, apiKey, createApiKey } = useUserContext()
-  const { theme, setTheme } = useTheme()
+  const { user } = useUserContext()
   const { mutate: signOut, isSuccess } = useSignOutAccount()
 
   const navigate = useNavigate()
@@ -87,13 +118,35 @@ const LeftSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <SidebarGroup>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarGroupLabel className="text-[14px]">
+                Biomes
+              </SidebarGroupLabel>
+              <SidebarMenuSub>
+                {biomeLinks.map(({ name, path }) => (
+                  <SidebarMenuSubItem key={name}>
+                    <SidebarMenuButton asChild>
+                      <Link to={path}>
+                        <span className="text-[16px]">{name}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarGroup>
+
         <SidebarGroup>
           <SidebarGroupLabel className="text-[14px]">
             Calculators
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {calculatorsLinks.map(({ name, icon, path }) => (
+              {calculatorLinks.map(({ name, icon, path }) => (
                 <SidebarMenuItem key={name}>
                   <SidebarMenuButton asChild>
                     <Link to={path}>
@@ -127,33 +180,7 @@ const LeftSidebar = () => {
                 side="right"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <div className="flex items-center gap-2 py-1">
-                  <Switch
-                    checked={theme === "dark"}
-                    onCheckedChange={() =>
-                      setTheme(theme === "dark" ? "light" : "dark")
-                    }
-                  />
-                  <span className="text-[16px]">Light/Dark theme</span>
-                </div>
-
-                <div className="flex flex-col gap-2 py-1">
-                  <Button
-                    onClick={createApiKey}
-                    className="w-full text-color-button-text bg-color-button-bg hover:bg-color-button-hover"
-                  >
-                    {apiKey ? "Regenerate API Key" : "Create API Key"}
-                  </Button>
-
-                  {apiKey && (
-                    <div className="p-2 bg-muted rounded-md">
-                      <span className="text-xs font-mono break-all">
-                        {apiKey}
-                      </span>
-                    </div>
-                  )}
-                </div>
-
+                <SubscriptionPlan plan={user.plan} />
                 <Button
                   onClick={() => signOut()}
                   className="w-full text-color-button-text bg-color-button-bg hover:bg-color-button-hover text-start flex justify-start mt-2"

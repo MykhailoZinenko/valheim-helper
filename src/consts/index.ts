@@ -1,0 +1,1 @@
+export const SUPPORT_EMAIL_ADDRESS = "valheim.helper.work@gmail.com";

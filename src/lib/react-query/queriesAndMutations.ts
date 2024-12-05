@@ -10,7 +10,7 @@ import {
 } from "../appwrite/api"
 import { Biome, INewUser } from "@/types"
 import { QUERY_KEYS } from "./queryKeys"
-import { getAllBiomes, getAllFood, getAllItems, getBiomeById, getCalculatorItems, getItemById } from "../valheim-helper/api"
+import { createDeveloperApiKey, getAllBiomes, getAllFood, getAllItems, getBiomeById, getCalculatorItems, getDeveloperApiKeys, getItemById, revokeDeveloperApiKey } from "../valheim-helper/api"
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -40,6 +40,39 @@ export const useGetCurrentUser = () => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_CURRENT_USER],
     queryFn: getCurrentUser,
+  })
+}
+
+export const useGetDevelopKeys = (userId: string) => {
+  return useQuery({
+    queryKey: [QUERY_KEYS.GET_DEVELOP_KEYS],
+    queryFn: () => getDeveloperApiKeys(userId),
+  })
+}
+
+export const useCreateDeveloperKey = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({userId, name} : {userId: string, name: string}) => createDeveloperApiKey(userId, name),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_DEVELOP_KEYS],
+      })
+    }
+  })
+}
+
+export const useRevokeDeveloperKey = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ userId, keyId}: {userId: string, keyId: string}) => revokeDeveloperApiKey(userId, keyId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_DEVELOP_KEYS],
+      })
+    }
   })
 }
 
@@ -94,7 +127,7 @@ export const useGetBiomes = () => {
 
 export const useGetBiomeById = (biomeId: Biome) => {
   return useQuery({
-    queryKey: [QUERY_KEYS.GET_BIOME_BY_ID],
+    queryKey: [QUERY_KEYS.GET_BIOME_BY_ID, biomeId],
     queryFn: () => getBiomeById(biomeId),
   })
 }

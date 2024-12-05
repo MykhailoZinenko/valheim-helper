@@ -47,7 +47,7 @@ const columns: ColumnDef<Food>[] = [
     },
     cell: ({ row }: { row: Row<Food> }) => {
       return (
-        <div className="flex items-center gap-2 text-nowrap">
+        <div className="flex items-center gap-2 text-nowrap min-w-max">
           <img
             src={(row.getValue("item") as Item).icon}
             height={32}
