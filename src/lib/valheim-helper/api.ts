@@ -35,7 +35,7 @@ async function getAppToken(): Promise<string | null> {
 
 export async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   console.log(endpoint)
-    const token = await getAppToken();
+  const token = await getAppToken();
   
   return fetch(`${API_URL}${endpoint}`, {
     ...options,

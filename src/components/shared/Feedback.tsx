@@ -23,7 +23,6 @@ import {
 } from "../ui/form"
 import { Textarea } from "../ui/textarea"
 import { useToast } from "@/hooks/use-toast"
-import { valheimHelperApiConfig } from "@/lib/valheim-helper/config"
 import { fetchWithAuth } from "@/lib/valheim-helper/api"
 
 const ISSUE_TYPES = ["question", "inaccuracy", "bug", "request"]
@@ -47,22 +46,22 @@ const Feedback = () => {
     if (!user) return
 
     setIsSubmitting(true)
+    console.log(values)
     try {
-      const response = await fetchWithAuth(
-        `${valheimHelperApiConfig.url}/api/feedback`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name: user.name,
-            email: user.email,
-            issueType: values.issueType,
-            description: values.description,
-          }),
-        }
-      )
+      const response = await fetchWithAuth(`/api/feedback`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: user.name,
+          email: user.email,
+          issueType: values.issueType,
+          description: values.description,
+        }),
+      })
+
+      console.log(response)
 
       if (!response.ok) {
         throw new Error("Failed to submit feedback")
@@ -76,6 +75,7 @@ const Feedback = () => {
       form.reset()
       setStep(1)
     } catch (error) {
+      console.log(error)
       toast({
         variant: "destructive",
         title: "Error",
