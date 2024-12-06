@@ -29,7 +29,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import { Checkbox } from "@radix-ui/react-checkbox"
 import UpgradeCTA from "@/components/shared/UpgradeCTA"
 import { useGetDevelopKeys } from "@/lib/react-query/queriesAndMutations"
 import Loader from "@/components/shared/Loader"
@@ -100,12 +99,12 @@ const Settings = () => {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-5xl font-norse font-bold text-color-text-primary">
+      <h1 className="text-4xl md:text-5xl font-norse font-bold text-color-text-primary">
         Customize your experience
       </h1>
 
       <div className="space-y-6">
-        <h2 className="text-3xl font-norse font-bold text-color-text-secondary">
+        <h2 className="text-2xl md:text-3xl font-norse font-bold text-color-text-secondary">
           Make it personal
         </h2>
 
@@ -135,7 +134,7 @@ const Settings = () => {
         </Card>
 
         <div className="flex flex-wrap items-center gap-2 justify-between">
-          <h2 className="text-3xl font-norse font-bold text-color-text-secondary">
+          <h2 className="text-2xl md:text-3xl font-norse font-bold text-color-text-secondary">
             Developer API Keys
           </h2>
           <div className="flex items-center space-x-2">
@@ -213,7 +212,7 @@ const Settings = () => {
                       Create New Key
                     </Button>
                   </DialogTrigger>
-                  <DialogContent>
+                  <DialogContent className="rounded-md">
                     <DialogHeader>
                       <DialogTitle>Create New API Key</DialogTitle>
                     </DialogHeader>
@@ -254,10 +253,12 @@ const Settings = () => {
                       >
                         <div className="space-y-1 overflow-hidden w-full">
                           <div className="flex items-center space-x-2 overflow-hidden w-full justify-between sm:justify-normal">
-                            <p className="font-medium truncate">{key.name}</p>
+                            <p className="text-sm sm:text-md font-medium truncate">
+                              {key.name}
+                            </p>
                             <Badge
                               variant={"secondary"}
-                              className={`text-md pointer-events-none ${
+                              className={`text-sm sm:text-md pointer-events-none ${
                                 key.status === "active"
                                   ? "bg-green-100 text-green-800"
                                   : "bg-red-100 text-red-800"

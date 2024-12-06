@@ -1,5 +1,6 @@
 import DataTable from "@/components/shared/DataTable"
 import Loader from "@/components/shared/Loader"
+import FoodTable from "@/components/shared/tables/FoodTable"
 import VignetteImage from "@/components/shared/VignetteImage"
 import { Button } from "@/components/ui/button"
 import { useGetBiomeById } from "@/lib/react-query/queriesAndMutations"
@@ -82,130 +83,6 @@ const resourceColumns: ColumnDef<any>[] = [
   },
 ]
 
-type Food = {
-  item: Item
-  health: number
-  stamina: number
-  eitr?: number
-  duration: number
-  regen: number
-}
-
-const foodColumns: ColumnDef<Food>[] = [
-  {
-    accessorKey: "item",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }: { row: Row<Food> }) => {
-      return (
-        <div className="flex items-center gap-2 text-nowrap min-w-max">
-          <img
-            src={(row.getValue("item") as Item).icon}
-            height={32}
-            width={32}
-          />
-          {(row.getValue("item") as Item).name}
-        </div>
-      )
-    },
-    filterFn: itemNameFilter,
-  },
-  {
-    accessorKey: "health",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Health
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      return <div className="px-4">{row.getValue("health")}</div>
-    },
-  },
-  {
-    accessorKey: "stamina",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Stamina
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      return <div className="px-4">{row.getValue("stamina")}</div>
-    },
-  },
-  {
-    accessorKey: "eitr",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Eitr
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      return <div className="px-4">{row.getValue("eitr")}</div>
-    },
-  },
-  {
-    accessorKey: "duration",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Duration
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      return <div className="px-4">{row.getValue("duration")} min</div>
-    },
-  },
-  {
-    accessorKey: "regen",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Regen
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => {
-      return <div className="px-4">{row.getValue("regen")}</div>
-    },
-  },
-]
-
 const Biome = () => {
   const { id } = useParams()
 
@@ -258,20 +135,7 @@ const Biome = () => {
                 return { item: { name: c.item.name, icon: c.item.icon } }
               })}
           />
-          <DataTable
-            columns={foodColumns}
-            data={biome.food.items
-              .sort((a, b) => a.name.localeCompare(b.name))
-              .map((f) => ({
-                item: {
-                  name: f.name,
-                  icon: f.icon,
-                },
-                ...f.stats,
-                duration: f.stats.duration / 60,
-                eitr: f.stats.eitr ?? 0,
-              }))}
-          />
+          <FoodTable data={biome.food.items} />
         </div>
       )}
     </>

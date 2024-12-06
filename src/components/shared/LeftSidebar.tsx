@@ -29,6 +29,7 @@ import { useUserContext } from "@/context/AuthContext"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import { Button } from "../ui/button"
 import SubscriptionPlan from "./SubscriptionPlan"
+import { useMediaQuery } from "@/hooks/use-media-query"
 
 const mainLinks = [
   {
@@ -87,6 +88,7 @@ const calculatorLinks = [
 const LeftSidebar = () => {
   const { user } = useUserContext()
   const { mutate: signOut, isSuccess } = useSignOutAccount()
+  const isDesktop = useMediaQuery("(min-width: 768px)")
 
   const navigate = useNavigate()
 
@@ -177,7 +179,9 @@ const LeftSidebar = () => {
                 </SidebarMenuButton>
               </PopoverTrigger>
               <PopoverContent
-                side="right"
+                side={isDesktop ? "right" : "top"}
+                sideOffset={isDesktop ? 16 : 4}
+                align="end"
                 className="w-[--radix-popper-anchor-width]"
               >
                 <SubscriptionPlan plan={user.plan} />
