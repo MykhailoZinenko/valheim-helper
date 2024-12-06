@@ -17,12 +17,14 @@ const SubscriptionPlan = ({ plan = "basic" }) => {
       >
         {isPro ? "Pro Plan" : "Basic Plan"}
       </span>
-      <Button
-        size="sm"
-        className="ml-auto bg-color-button-bg text-color-button-text hover:bg-color-button-hover"
-      >
-        <Link to={"/settings"}>{isPro ? "Manage" : "Upgrade"}</Link>
-      </Button>
+      <Link to={"/settings"}>
+        <Button
+          size="sm"
+          className="ml-auto bg-color-button-bg text-color-button-text hover:bg-color-button-hover"
+        >
+          {isPro ? "Manage" : "Upgrade"}
+        </Button>
+      </Link>
     </div>
   )
 }

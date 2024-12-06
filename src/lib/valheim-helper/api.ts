@@ -33,7 +33,7 @@ async function getAppToken(): Promise<string | null> {
   return appToken;
 }
 
-async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
+export async function fetchWithAuth(endpoint: string, options: RequestInit = {}) {
   console.log(endpoint)
     const token = await getAppToken();
   

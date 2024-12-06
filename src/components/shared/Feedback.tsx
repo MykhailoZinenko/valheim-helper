@@ -24,6 +24,7 @@ import {
 import { Textarea } from "../ui/textarea"
 import { useToast } from "@/hooks/use-toast"
 import { valheimHelperApiConfig } from "@/lib/valheim-helper/config"
+import { fetchWithAuth } from "@/lib/valheim-helper/api"
 
 const ISSUE_TYPES = ["question", "inaccuracy", "bug", "request"]
 
@@ -47,7 +48,7 @@ const Feedback = () => {
 
     setIsSubmitting(true)
     try {
-      const response = await fetch(
+      const response = await fetchWithAuth(
         `${valheimHelperApiConfig.url}/api/feedback`,
         {
           method: "POST",
