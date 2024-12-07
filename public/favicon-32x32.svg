@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Viking V shape -->
+  <path d="M4 4L16 28L28 4" stroke="#B8A355" stroke-width="4" fill="none"/>
+  <!-- Optional runic decorative elements at ends -->
+  <path d="M2 6L6 6M26 6L30 6" stroke="#B8A355" stroke-width="3"/>
+</svg>

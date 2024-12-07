@@ -1,0 +1,43 @@
+{
+  "name": "Valheim Helper - Ultimate Viking Survival Companion",
+  "short_name": "Valheim Helper",
+  "description": "Comprehensive Valheim game companion for resource calculation, food optimization, and item tracking",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#13151C",
+  "theme_color": "#13151C",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "utilities"],
+  "screenshots": [
+    {
+      "src": "/screenshot1.png",
+      "sizes": "1280x720",
+      "type": "image/png"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Resource Calculator",
+      "url": "/calculators/resource",
+      "description": "Calculate required resources for your builds"
+    },
+    {
+      "name": "Food Calculator",
+      "url": "/calculators/food",
+      "description": "Optimize your food combinations"
+    }
+  ]
+}
