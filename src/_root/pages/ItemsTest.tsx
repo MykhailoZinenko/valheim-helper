@@ -1,5 +1,4 @@
 import { useGetItems } from "@/lib/react-query/queriesAndMutations"
-import { IItem } from "@/types"
 import Loader from "@/components/shared/Loader"
 import { Link } from "react-router-dom"
 
@@ -21,10 +20,10 @@ const ItemsTest = () => {
             Explore items
           </h2>
           <ol className="font-mono list-decimal list-inside w-full text-left mt-4">
-            {data?.items?.map((item: IItem) => (
+            {data?.items?.map((item) => (
               <li key={item.id}>
                 <img src={item.icon} />{" "}
-                <Link to={`/item/${item.id}`}>{item.name}</Link>{" "}
+                <Link to={`/item/${item.id}`}>{item.readableName}</Link>{" "}
                 {" " + item.type}
               </li>
             ))}

@@ -6,7 +6,6 @@ import {
   IBiomeExtended,
   GameObject,
   IItemCompact,
-  Resource,
   IItemFull,
   ApiKey,
   Food,

@@ -19,7 +19,7 @@ const Home = () => {
       {/* Hero Section */}
       <Hero />
       {/* <QuickTools /> */}
-      <BiomesSlider data={biomes ?? { total: 0, biomes: [] }} />
+      <BiomesSlider data={biomes ?? { total: 0, items: [] }} />
       {/* <Features itemsLength={items?.total} /> */}
     </div>
   )
