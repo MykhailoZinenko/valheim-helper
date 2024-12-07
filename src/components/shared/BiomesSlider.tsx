@@ -9,12 +9,12 @@ import {
   type CarouselApi,
 } from "../ui/carousel"
 import VignetteImage from "./VignetteImage"
-import { IBiome } from "@/types"
+import { IBiome, IItem, IResponse } from "@/types"
 import { Link } from "react-router-dom"
 import { Shield } from "lucide-react"
 
 interface BiomesSliderProps {
-  data: { total: number; biomes: IBiome[] }
+  data: IResponse<IItem<IBiome>>
 }
 
 const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
@@ -46,7 +46,7 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
       >
         <CarouselPrevious className="relative left-0 h-12 w-12 border-2 border-accent/20 hover:border-accent/50 transition-colors hidden sm:flex" />
         <CarouselContent className="-m-0.5">
-          {data.biomes.map((biome, index) => (
+          {data.items.map((biome, index) => (
             <CarouselItem key={index} className="p-1">
               <Card className="bg-color-primary-bg border-2 border-accent/10 hover:border-accent/20 transition-all duration-300">
                 <CardContent className="flex h-[450px] items-center justify-center p-8 relative overflow-hidden">
@@ -77,7 +77,7 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
                     </p>
 
                     {/* Bosses Section */}
-                    {biome.bosses?.length > 0 && (
+                    {biome.bosses.items?.length > 0 && (
                       <div className="mt-6 space-y-4">
                         <div className="flex items-center gap-2">
                           <Shield className="w-5 h-5 text-accent mb-[5px]" />
@@ -86,21 +86,21 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
                           </h4>
                         </div>
                         <div className="flex flex-col gap-2">
-                          {biome.bosses.map((creature) => (
+                          {biome.bosses.items.map((creature) => (
                             <Link
-                              key={creature.name}
-                              to={`/item/${creature.id}`}
+                              key={creature.item.readableName}
+                              to={`/item/${creature.item.id}`}
                               className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/10 transition-colors group"
                             >
                               <img
-                                src={creature.icon}
+                                src={creature.item.icon}
                                 height={32}
                                 width={32}
                                 loading="lazy"
                                 className="transform transition-transform group-hover:scale-110"
                               />
                               <span className="group-hover:text-color-link transition-colors">
-                                {creature.name}
+                                {creature.item.readableName}
                               </span>
                             </Link>
                           ))}
@@ -118,7 +118,7 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
 
       {/* Pagination Indicators */}
       <div className="flex justify-center gap-2 mt-4">
-        {data.biomes.map((_, index) => (
+        {data.items.map((_, index) => (
           <button
             key={index}
             onClick={() => handleDotClick(index)}

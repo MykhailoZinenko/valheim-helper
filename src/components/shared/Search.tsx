@@ -25,7 +25,7 @@ import {
 import { filters } from "@/consts/searchFilters"
 import { Badge } from "../ui/badge"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
-import { IItem } from "@/types"
+import { IItem, IItemCompact } from "@/types"
 import Loader from "./Loader"
 
 interface FilterGroupProps {
@@ -111,9 +111,9 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
   const [open, setOpen] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const [results, setResults] = useState<IItem[]>([])
+  const [results, setResults] = useState<IItem<IItemCompact>[]>([])
   const [pending, setPending] = useState(false)
-  const [filteredItems, setFilteredItems] = useState<IItem[]>([])
+  const [filteredItems, setFilteredItems] = useState<IItem<IItemCompact>[]>([])
   const [showResults, setShowResults] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
 
@@ -135,7 +135,7 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
 
   const fuse = React.useMemo(() => {
     if (data) {
-      return new Fuse<IItem>(data.items, {
+      return new Fuse<IItem<IItemCompact>>(data.items, {
         keys: ["id"],
         threshold: 0.4,
       })
@@ -158,7 +158,7 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
 
   // Apply filters to items
   const applyFilters = useCallback(
-    (items: IItem[]) => {
+    (items: IItem<IItemCompact>[]) => {
       return items.filter((item) => {
         if (
           selectedFilters.type.length > 0 &&
@@ -353,7 +353,7 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
           variant === "inline" ? setShowResults(false) : setOpen(false)
         }
       >
-        <img src={item.icon} height={32} width={32} /> {item.name}
+        <img src={item.icon} height={32} width={32} /> {item.readableName}
       </Link>
     )
   }

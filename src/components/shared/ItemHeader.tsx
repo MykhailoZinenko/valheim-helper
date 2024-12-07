@@ -2,13 +2,14 @@ import { StarFilledIcon } from "@radix-ui/react-icons"
 import { Link, useParams } from "react-router-dom"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { ReactNode } from "react"
+import { Creature, GameObject, IItem } from "@/types"
 
 const ItemHeader = ({
   data,
   maxLevel,
   children,
 }: {
-  data: any
+  data: IItem<GameObject>
   maxLevel: number
   children?: ReactNode
 }) => {
@@ -26,7 +27,7 @@ const ItemHeader = ({
             <img src={data.icon} className="aspect-square w-[65px]" />
             <div>
               <h1 className="text-5xl font-norse font-bold text-color-text-primary">
-                {data.name}
+                {data.readableName}
               </h1>
               <h2 className="text-2xl font-norse text-color-text-secondary">
                 {data.type}
@@ -34,7 +35,8 @@ const ItemHeader = ({
             </div>
           </div>
 
-          {data.spawners && data.spawners.length > 0 ? (
+          {(data as Creature).spawners &&
+          (data as Creature).spawners.length > 0 ? (
             <TabsList>
               {Array.from({
                 length: maxLevel,
@@ -53,7 +55,8 @@ const ItemHeader = ({
             </TabsList>
           ) : null}
         </div>
-        {data.spawners && data.spawners.length > 0 ? (
+        {(data as Creature).spawners &&
+        (data as Creature).spawners.length > 0 ? (
           <>
             {Array.from({
               length: maxLevel,

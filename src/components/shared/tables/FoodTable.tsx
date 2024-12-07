@@ -1,11 +1,11 @@
 import { FC } from "react"
 import DataTable from "../DataTable"
-import { IFood } from "@/types"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, CopyIcon } from "lucide-react"
 import { Link } from "react-router-dom"
 import { toast } from "@/hooks/use-toast"
 import { Row, ColumnDef } from "@tanstack/react-table"
+import { Food, IItemCompact, IItemFull } from "@/types"
 
 type Item = {
   icon: string
@@ -13,7 +13,7 @@ type Item = {
   id: string
 }
 
-type Food = {
+type FoodRow = {
   item: Item
   health: number
   stamina: number
@@ -23,7 +23,7 @@ type Food = {
 }
 
 const itemNameFilter = (
-  row: Row<Food>,
+  row: Row<FoodRow>,
   columnId: string,
   filterValue: string
 ) => {
@@ -31,7 +31,7 @@ const itemNameFilter = (
   return item.name.toLowerCase().includes(filterValue.toLowerCase())
 }
 
-const columns: ColumnDef<Food>[] = [
+const columns: ColumnDef<FoodRow>[] = [
   {
     accessorKey: "item",
     header: ({ column }) => {
@@ -45,7 +45,7 @@ const columns: ColumnDef<Food>[] = [
         </Button>
       )
     },
-    cell: ({ row }: { row: Row<Food> }) => {
+    cell: ({ row }: { row: Row<FoodRow> }) => {
       console.log(row.getValue("item"))
       return (
         <div className="flex items-center gap-2 text-nowrap min-w-max">
@@ -175,7 +175,7 @@ const columns: ColumnDef<Food>[] = [
 ]
 
 interface FoodTableProps {
-  data: IFood[]
+  data: IItemFull<IItemCompact & { Food: Food }>[]
 }
 
 const FoodTable: FC<FoodTableProps> = ({ data }) => {
@@ -183,16 +183,16 @@ const FoodTable: FC<FoodTableProps> = ({ data }) => {
     <DataTable
       columns={columns}
       data={data
-        .sort((a, b) => a.name.localeCompare(b.name))
+        .sort((a, b) => a.item.readableName.localeCompare(b.item.readableName))
         .map((f) => ({
           item: {
-            name: f.name,
-            icon: f.icon,
-            id: f.id,
+            name: f.item.readableName,
+            icon: f.item.icon,
+            id: f.item.id,
           },
-          ...f.stats,
-          duration: f.stats.duration / 60,
-          eitr: f.stats.eitr ?? 0,
+          ...f.item.Food!,
+          duration: f.item.Food!.duration / 60,
+          eitr: f.item.Food!.eitr ?? 0,
         }))}
     />
   )

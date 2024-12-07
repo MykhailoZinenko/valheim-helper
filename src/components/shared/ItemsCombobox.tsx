@@ -10,13 +10,13 @@ import {
   CommandList,
 } from "../ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
-import { IItem } from "@/types"
+import { IItemFull } from "@/types"
 
-interface ItemsComboboxProps<T extends IItem> {
+interface ItemsComboboxProps<T extends IItemFull<any>> {
   data: T[]
   setItems: Dispatch<SetStateAction<{ name: string; quantity: number }[]>>
 }
-const ItemsCombobox = <T extends IItem>({
+const ItemsCombobox = <T extends IItemFull<any>>({
   data,
   setItems,
 }: ItemsComboboxProps<T>) => {
@@ -33,7 +33,8 @@ const ItemsCombobox = <T extends IItem>({
           className="w-[200px] justify-between"
         >
           {value
-            ? data.find((item) => item.name === value)?.name
+            ? data.find((item) => item.item.readableName === value)?.item
+                .readableName
             : "Select item..."}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -46,8 +47,8 @@ const ItemsCombobox = <T extends IItem>({
             <CommandGroup>
               {data.map((item) => (
                 <CommandItem
-                  key={item.name}
-                  value={item.name}
+                  key={item.item.readableName}
+                  value={item.item.readableName}
                   onSelect={(currentValue) => {
                     setValue("")
                     setItems((prev) => [
@@ -61,8 +62,8 @@ const ItemsCombobox = <T extends IItem>({
                   className="h-[40px]"
                 >
                   <div className="flex items-center gap-2 text-nowrap">
-                    <img src={item.icon} height={32} width={32} />
-                    {item.name}
+                    <img src={item.item.icon} height={32} width={32} />
+                    {item.item.readableName}
                   </div>
                 </CommandItem>
               ))}

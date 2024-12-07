@@ -28,15 +28,15 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip"
-import { IRecipeItem } from "@/types"
 import { StarFilledIcon } from "@radix-ui/react-icons"
+import { IItemCompact, IItemFull } from "@/types"
 
 const Calculator = ({
   name,
   data,
 }: {
   name: "food" | "resource"
-  data: IRecipeItem[]
+  data: IItemFull<IItemCompact>[]
   isCompact?: boolean
 }) => {
   // State management
@@ -80,16 +80,21 @@ const Calculator = ({
 
       if (itemNames.length > 0) {
         itemNames.forEach((item) => {
-          const foundItem = data.find((i: IRecipeItem) => i.name === item.name)
+          const foundItem = data.find(
+            (i: IItemFull<IItemCompact>) => i.item.readableName === item.name
+          )
 
           if (foundItem && foundItem.recipe) {
             console.log("recipe", foundItem.recipe)
+            if (foundItem.recipe.type !== "craft") return
+
             Object.entries(foundItem.recipe.materials).forEach(
               ([key, value]) => {
                 console.log(key, value)
                 const materialItem = items.items.find((item) => item.id === key)
                 const material = materials.find(
-                  (material) => material.name === (materialItem?.name || key)
+                  (material) =>
+                    material.name === (materialItem?.readableName || key)
                 )
 
                 console.log(materials, material)
@@ -98,7 +103,7 @@ const Calculator = ({
                   material.quantity += (value as number) * item.quantity
                 } else {
                   materials.push({
-                    name: materialItem?.name || key,
+                    name: materialItem?.readableName || key,
                     quantity: (value as number) * item.quantity,
                   })
                 }
@@ -131,28 +136,34 @@ const Calculator = ({
 
       if (itemNames.length > 0) {
         itemNames.forEach((item) => {
-          const foundItem = data.find((i: IRecipeItem) => i.name === item.name)
+          const foundItem = data.find(
+            (i: IItemFull<IItemCompact>) => i.item.readableName === item.name
+          )
 
-          if (foundItem && foundItem.recipe?.source) {
-            const workbenchItem = items.items.find(
-              (item) => item.id === foundItem.recipe.source.station
-            )
-            const workbench = workbenches.find(
-              (workbench) =>
-                workbench.name ===
-                (workbenchItem?.name || foundItem.recipe.source.station)
-            )
+          if (foundItem && foundItem.recipe) {
+            const recipe = foundItem.recipe
 
-            if (workbench) {
-              workbench.level = Math.max(
-                workbench.level,
-                foundItem.recipe.source.level
+            if (recipe.type === "craft") {
+              const workbenchItem = items.items.find(
+                (item) => item.id === recipe.source.station
               )
-            } else {
-              workbenches.push({
-                name: workbenchItem?.name || foundItem.recipe.source.station,
-                level: foundItem.recipe.source.level,
-              })
+              const workbench = workbenches.find(
+                (workbench) =>
+                  workbench.name ===
+                  (workbenchItem?.readableName || recipe.source.station)
+              )
+
+              if (workbench) {
+                workbench.level = Math.max(workbench.level, recipe.source.level)
+              } else {
+                workbenches.push({
+                  name:
+                    workbenchItem?.readableName ||
+                    recipe.source.station ||
+                    "Unknown",
+                  level: recipe.source.level,
+                })
+              }
             }
           }
         })
@@ -305,8 +316,10 @@ const Calculator = ({
                   >
                     <img
                       src={
-                        data.find((f: IRecipeItem) => f.name === item.name)
-                          ?.icon
+                        data.find(
+                          (f: IItemFull<IItemCompact>) =>
+                            f.item.readableName === item.name
+                        )?.item.icon
                       }
                       height={32}
                       width={32}
@@ -367,7 +380,9 @@ const Calculator = ({
                   >
                     <img
                       src={
-                        items.items.find((f) => f.name === workbench.name)?.icon
+                        items.items.find(
+                          (f) => f.readableName === workbench.name
+                        )?.icon
                       }
                       height={32}
                       width={32}
@@ -394,7 +409,9 @@ const Calculator = ({
                   >
                     <img
                       src={
-                        items.items.find((f) => f.name === material.name)?.icon
+                        items.items.find(
+                          (f) => f.readableName === material.name
+                        )?.icon
                       }
                       height={32}
                       width={32}
@@ -496,7 +513,8 @@ const Calculator = ({
                     >
                       <img
                         src={
-                          items.items.find((f) => f.name === item.name)?.icon
+                          items.items.find((f) => f.readableName === item.name)
+                            ?.icon
                         }
                         height={32}
                         width={32}

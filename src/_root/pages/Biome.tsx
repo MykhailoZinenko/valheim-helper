@@ -119,20 +119,28 @@ const Biome = () => {
           </div>
           <DataTable
             columns={creatureColumns}
-            data={biome.creatures
-              .sort((a, b) => a.item.name.localeCompare(b.item.name))
+            data={biome.creatures.items
+              .sort((a, b) =>
+                a.item.readableName.localeCompare(b.item.readableName)
+              )
               .map((c) => {
                 console.log(c)
-                return { item: { name: c.item.name, icon: c.item.icon } }
+                return {
+                  item: { name: c.item.readableName, icon: c.item.icon },
+                }
               })}
           />
           <DataTable
             columns={resourceColumns}
-            data={biome.resources
-              .sort((a, b) => a.item.name.localeCompare(b.item.name))
+            data={biome.resources.items
+              .sort((a, b) =>
+                a.item.readableName.localeCompare(b.item.readableName)
+              )
               .map((c) => {
                 console.log(c)
-                return { item: { name: c.item.name, icon: c.item.icon } }
+                return {
+                  item: { name: c.item.readableName, icon: c.item.icon },
+                }
               })}
           />
           <FoodTable data={biome.food.items} />
