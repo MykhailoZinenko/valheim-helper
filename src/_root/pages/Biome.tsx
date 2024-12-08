@@ -44,6 +44,7 @@ const creatureColumns: ColumnDef<any>[] = [
             src={(row.getValue("item") as Item).icon}
             height={32}
             width={32}
+            loading="lazy"
           />
           {(row.getValue("item") as Item).name}
         </div>
@@ -74,6 +75,7 @@ const resourceColumns: ColumnDef<any>[] = [
             src={(row.getValue("item") as Item).icon}
             height={32}
             width={32}
+            loading="lazy"
           />
           {(row.getValue("item") as Item).name}
         </div>

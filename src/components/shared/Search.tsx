@@ -116,7 +116,7 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
   const [filteredItems, setFilteredItems] = useState<IItem<IItemCompact>[]>([])
   const [showResults, setShowResults] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
-
+  const [shouldLoadData, setShouldLoadData] = useState(false)
   const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({
     type: [],
     biome: [],
@@ -126,7 +126,7 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
 
   const navigate = useNavigate()
 
-  const { data, isLoading } = useGetItems()
+  const { data, isLoading } = useGetItems(shouldLoadData)
   const listRef = useRef<List>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -155,6 +155,14 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
       station: [],
     })
   }, [])
+
+  useEffect(() => {
+    if (variant === "inline") {
+      setShouldLoadData(showResults)
+    } else {
+      setShouldLoadData(open)
+    }
+  }, [variant, showResults, open])
 
   // Apply filters to items
   const applyFilters = useCallback(
@@ -353,7 +361,8 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
           variant === "inline" ? setShowResults(false) : setOpen(false)
         }
       >
-        <img src={item.icon} height={32} width={32} /> {item.readableName}
+        <img src={item.icon} loading="lazy" height={32} width={32} />{" "}
+        {item.readableName}
       </Link>
     )
   }
@@ -368,7 +377,10 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
             className="w-full text-[16px] h-10"
             value={searchTerm}
             onChange={handleSearch}
-            onFocus={() => setShowResults(true)}
+            onFocus={() => {
+              setShowResults(true)
+              setShouldLoadData(true)
+            }}
           />
 
           {showResults && searchTerm && (

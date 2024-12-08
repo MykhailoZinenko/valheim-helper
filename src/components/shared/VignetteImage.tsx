@@ -31,6 +31,7 @@ const VignetteImage: React.FC<VignetteImageProps> = ({
     >
       <img
         src={src}
+        loading="lazy"
         alt="Background image"
         className="absolute inset-0 w-full h-full object-cover"
       />

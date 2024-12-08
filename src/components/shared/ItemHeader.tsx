@@ -24,7 +24,11 @@ const ItemHeader = ({
       <Tabs defaultValue={level.toString()}>
         <div className="flex justify-between">
           <div className="flex gap-2 items-center">
-            <img src={data.icon} className="aspect-square w-[65px]" />
+            <img
+              src={data.icon}
+              loading="lazy"
+              className="aspect-square w-[65px]"
+            />
             <div>
               <h1 className="text-5xl font-norse font-bold text-color-text-primary">
                 {data.readableName}

@@ -51,6 +51,7 @@ const columns: ColumnDef<FoodRow>[] = [
         <div className="flex items-center gap-2 text-nowrap min-w-max">
           <img
             src={(row.getValue("item") as Item).icon}
+            loading="lazy"
             height={32}
             width={32}
           />

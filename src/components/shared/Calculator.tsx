@@ -321,6 +321,7 @@ const Calculator = ({
                             f.item.readableName === item.name
                         )?.item.icon
                       }
+                      loading="lazy"
                       height={32}
                       width={32}
                       className="rounded-md"
@@ -384,6 +385,7 @@ const Calculator = ({
                           (f) => f.readableName === workbench.name
                         )?.icon
                       }
+                      loading="lazy"
                       height={32}
                       width={32}
                       className="rounded-md"
@@ -413,6 +415,7 @@ const Calculator = ({
                           (f) => f.readableName === material.name
                         )?.icon
                       }
+                      loading="lazy"
                       height={32}
                       width={32}
                       className="rounded-md"
@@ -516,6 +519,7 @@ const Calculator = ({
                           items.items.find((f) => f.readableName === item.name)
                             ?.icon
                         }
+                        loading="lazy"
                         height={32}
                         width={32}
                         className="rounded-md"

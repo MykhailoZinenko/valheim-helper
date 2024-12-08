@@ -10,7 +10,17 @@ import {
 } from "../appwrite/api"
 import { Biome, INewUser } from "@/types"
 import { QUERY_KEYS } from "./queryKeys"
-import { createDeveloperApiKey, getAllBiomes, getAllFood, getAllItems, getBiomeById, getCalculatorItems, getDeveloperApiKeys, getItemById, revokeDeveloperApiKey } from "../valheim-helper/api"
+import {
+  createDeveloperApiKey,
+  getAllBiomes,
+  getAllFood,
+  getAllItems,
+  getBiomeById,
+  getCalculatorItems,
+  getDeveloperApiKeys,
+  getItemById,
+  revokeDeveloperApiKey,
+} from "../valheim-helper/api"
 
 export const useCreateUserAccount = () => {
   return useMutation({
@@ -54,12 +64,13 @@ export const useCreateDeveloperKey = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({userId, name} : {userId: string, name: string}) => createDeveloperApiKey(userId, name),
+    mutationFn: ({ userId, name }: { userId: string; name: string }) =>
+      createDeveloperApiKey(userId, name),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_DEVELOP_KEYS],
       })
-    }
+    },
   })
 }
 
@@ -67,19 +78,21 @@ export const useRevokeDeveloperKey = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ userId, keyId}: {userId: string, keyId: string}) => revokeDeveloperApiKey(userId, keyId),
+    mutationFn: ({ userId, keyId }: { userId: string; keyId: string }) =>
+      revokeDeveloperApiKey(userId, keyId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_DEVELOP_KEYS],
       })
-    }
+    },
   })
 }
 
-export const useGetItems = () => {
+export const useGetItems = (enabled: boolean = true) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_ITEMS],
     queryFn: getAllItems,
+    enabled,
   })
 }
 
@@ -96,10 +109,13 @@ export const useGetItemByIdMutation = () => {
 
   return useMutation({
     mutationFn: async (itemId: string) => {
-      const cachedItem = queryClient.getQueryData([QUERY_KEYS.GET_ITEM_BY_ID, itemId])
+      const cachedItem = queryClient.getQueryData([
+        QUERY_KEYS.GET_ITEM_BY_ID,
+        itemId,
+      ])
 
       console.log("here")
-      
+
       if (cachedItem) {
         return cachedItem
       }
@@ -109,12 +125,15 @@ export const useGetItemByIdMutation = () => {
       const fetchedItem = await getItemById(itemId)
 
       if (fetchedItem) {
-        queryClient.setQueryData([QUERY_KEYS.GET_ITEM_BY_ID, itemId], fetchedItem)
+        queryClient.setQueryData(
+          [QUERY_KEYS.GET_ITEM_BY_ID, itemId],
+          fetchedItem
+        )
         return fetchedItem
       }
 
       throw new Error("Item not found")
-    }, 
+    },
   })
 }
 
@@ -143,7 +162,7 @@ export const useGetUserCalculations = (userId: string, name: string) => {
   return useQuery({
     queryKey: [QUERY_KEYS.GET_USER_CALCULATIONS],
     queryFn: () => getUserCalculations(userId, name),
-    enabled: !!userId
+    enabled: !!userId,
   })
 }
 
@@ -151,12 +170,20 @@ export const usePostCalculation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ userId, type, calculation } : { userId: string, type: string, calculation: any}) => postCalculation(userId, type, calculation),
+    mutationFn: ({
+      userId,
+      type,
+      calculation,
+    }: {
+      userId: string
+      type: string
+      calculation: any
+    }) => postCalculation(userId, type, calculation),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_CALCULATIONS],
       })
-    }
+    },
   })
 }
 
@@ -169,7 +196,7 @@ export const useDeleteCalculation = () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.GET_USER_CALCULATIONS],
       })
-    }
+    },
   })
 }
 

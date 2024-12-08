@@ -62,7 +62,12 @@ const ItemsCombobox = <T extends IItemFull<any>>({
                   className="h-[40px]"
                 >
                   <div className="flex items-center gap-2 text-nowrap">
-                    <img src={item.item.icon} height={32} width={32} />
+                    <img
+                      src={item.item.icon}
+                      loading="lazy"
+                      height={32}
+                      width={32}
+                    />
                     {item.item.readableName}
                   </div>
                 </CommandItem>
