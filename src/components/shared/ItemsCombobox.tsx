@@ -51,12 +51,13 @@ const ItemsCombobox = <T extends IItemFull<any>>({
                   value={item.item.readableName}
                   onSelect={(currentValue) => {
                     setValue("")
-                    setItems((prev) => [
-                      ...new Set([
-                        ...prev,
-                        { name: currentValue, quantity: 1 },
-                      ]),
-                    ])
+                    setItems((prev) =>
+                      prev.map((item) =>
+                        item.name === currentValue
+                          ? { ...item, quantity: item.quantity + 1 }
+                          : item
+                      )
+                    )
                     setOpen(false)
                   }}
                   className="h-[40px]"
