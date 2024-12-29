@@ -1,89 +1,13 @@
 import DataTable from "@/components/shared/DataTable"
+import ItemLink from "@/components/shared/ItemLink"
 import Loader from "@/components/shared/Loader"
+import CreaturesTable from "@/components/shared/tables/CreaturesTable"
 import FoodTable from "@/components/shared/tables/FoodTable"
 import VignetteImage from "@/components/shared/VignetteImage"
-import { Button } from "@/components/ui/button"
 import { useGetBiomeById } from "@/lib/react-query/queriesAndMutations"
+import { cn } from "@/lib/utils"
 import { type Biome } from "@/types"
-import { ColumnDef, Row } from "@tanstack/react-table"
-import { ArrowUpDown } from "lucide-react"
 import { useParams } from "react-router-dom"
-
-type Item = {
-  icon: string
-  name: string
-}
-
-const itemNameFilter = (
-  row: Row<any>,
-  columnId: string,
-  filterValue: string
-) => {
-  const item: Item = row.getValue(columnId)
-  return item.name.toLowerCase().includes(filterValue.toLowerCase())
-}
-
-const creatureColumns: ColumnDef<any>[] = [
-  {
-    accessorKey: "item",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }: { row: Row<any> }) => {
-      return (
-        <div className="flex items-center gap-2 text-nowrap">
-          <img
-            src={(row.getValue("item") as Item).icon}
-            height={32}
-            width={32}
-            loading="lazy"
-          />
-          {(row.getValue("item") as Item).name}
-        </div>
-      )
-    },
-    filterFn: itemNameFilter,
-  },
-]
-
-const resourceColumns: ColumnDef<any>[] = [
-  {
-    accessorKey: "item",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Name
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }: { row: Row<any> }) => {
-      return (
-        <div className="flex items-center gap-2 text-nowrap">
-          <img
-            src={(row.getValue("item") as Item).icon}
-            height={32}
-            width={32}
-            loading="lazy"
-          />
-          {(row.getValue("item") as Item).name}
-        </div>
-      )
-    },
-    filterFn: itemNameFilter,
-  },
-]
 
 const Biome = () => {
   const { id } = useParams()
@@ -119,32 +43,23 @@ const Biome = () => {
               />
             </div>
           </div>
-          <DataTable
-            columns={creatureColumns}
-            data={biome.creatures.items
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full md:mx-auto">
+            {biome.resources.items
               .sort((a, b) =>
                 a.item.readableName.localeCompare(b.item.readableName)
               )
-              .map((c) => {
-                console.log(c)
-                return {
-                  item: { name: c.item.readableName, icon: c.item.icon },
-                }
+              .map((item) => {
+                return (
+                  <ItemLink
+                    item={item.item}
+                    className="w-full"
+                    variant="filled"
+                  />
+                )
               })}
-          />
-          <DataTable
-            columns={resourceColumns}
-            data={biome.resources.items
-              .sort((a, b) =>
-                a.item.readableName.localeCompare(b.item.readableName)
-              )
-              .map((c) => {
-                console.log(c)
-                return {
-                  item: { name: c.item.readableName, icon: c.item.icon },
-                }
-              })}
-          />
+          </div>
+          <CreaturesTable data={biome.creatures.items} />
+
           <FoodTable data={biome.food.items} />
         </div>
       )}

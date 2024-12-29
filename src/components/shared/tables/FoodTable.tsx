@@ -2,36 +2,13 @@ import { FC } from "react"
 import DataTable from "../DataTable"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, CopyIcon } from "lucide-react"
-import { Link } from "react-router-dom"
 import { toast } from "@/hooks/use-toast"
 import { Row, ColumnDef } from "@tanstack/react-table"
 import { Food, IItemCompact, IItemFull } from "@/types"
+import ItemLink from "../ItemLink"
+import { FoodRow, itemNameFilter, TableRow } from "@/types/tables"
 
-type Item = {
-  icon: string
-  name: string
-  id: string
-}
-
-type FoodRow = {
-  item: Item
-  health: number
-  stamina: number
-  eitr?: number
-  duration: number
-  regen: number
-}
-
-const itemNameFilter = (
-  row: Row<FoodRow>,
-  columnId: string,
-  filterValue: string
-) => {
-  const item: Item = row.getValue(columnId)
-  return item.name.toLowerCase().includes(filterValue.toLowerCase())
-}
-
-const columns: ColumnDef<FoodRow>[] = [
+const columns: ColumnDef<TableRow<FoodRow>>[] = [
   {
     accessorKey: "item",
     header: ({ column }) => {
@@ -45,24 +22,9 @@ const columns: ColumnDef<FoodRow>[] = [
         </Button>
       )
     },
-    cell: ({ row }: { row: Row<FoodRow> }) => {
+    cell: ({ row }: { row: Row<TableRow<FoodRow>> }) => {
       console.log(row.getValue("item"))
-      return (
-        <div className="flex items-center gap-2 text-nowrap min-w-max">
-          <img
-            src={(row.getValue("item") as Item).icon}
-            loading="lazy"
-            height={32}
-            width={32}
-          />
-          <Link
-            to={`/item/${(row.getValue("item") as Item).id}`}
-            className="text-color-link hover:underline"
-          >
-            {(row.getValue("item") as Item).name}
-          </Link>
-        </div>
-      )
+      return <ItemLink item={row.getValue("item")} />
     },
     filterFn: itemNameFilter,
   },
@@ -160,7 +122,7 @@ const columns: ColumnDef<FoodRow>[] = [
         <Button
           size="icon"
           onClick={() => {
-            navigator.clipboard.writeText(food.item.name)
+            navigator.clipboard.writeText(food.item.readableName)
 
             toast({
               title: "Copied to clipboard",
@@ -187,7 +149,7 @@ const FoodTable: FC<FoodTableProps> = ({ data }) => {
         .sort((a, b) => a.item.readableName.localeCompare(b.item.readableName))
         .map((f) => ({
           item: {
-            name: f.item.readableName,
+            readableName: f.item.readableName,
             icon: f.item.icon,
             id: f.item.id,
           },

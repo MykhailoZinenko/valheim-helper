@@ -5,7 +5,6 @@ import SignupForm from "./_auth/forms/SignupForm"
 import { Toaster } from "./components/ui/toaster"
 import RootLayout from "./_root/RootLayout"
 import Home from "./_root/pages/Home"
-import Item from "./_root/pages/Item"
 import ResourceCalculator from "./_root/pages/ResourceCalculator"
 import About from "./_root/pages/About"
 import Settings from "./_root/pages/Settings"
@@ -13,6 +12,7 @@ import ItemsTest from "./_root/pages/ItemsTest"
 import Biome from "./_root/pages/Biome"
 import Homepage from "./_root/pages/Page"
 import FoodCalculator from "./_root/pages/FoodCalculator"
+import ItemPage from "./_root/pages/ItemPage"
 
 function App() {
   return (
@@ -32,8 +32,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/biome/:id" element={<Biome />} />
-          <Route path="/item/:id" element={<Item />}>
-            <Route path="/item/:id/:level" element={<Item />}></Route>
+          <Route path="/item/:id" element={<ItemPage />}>
+            <Route path="/item/:id/:level" element={<ItemPage />}></Route>
           </Route>
           <Route path="/calculators">
             <Route
