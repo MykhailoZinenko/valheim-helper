@@ -30,6 +30,7 @@ import {
 } from "../ui/tooltip"
 import { StarFilledIcon } from "@radix-ui/react-icons"
 import { IItemCompact, IItemFull } from "@/types"
+import { useCalculator } from "@/context/CalculatorContext"
 
 const Calculator = ({
   name,
@@ -43,17 +44,6 @@ const Calculator = ({
   const [autoDelete, setAutoDelete] = useState(
     JSON.parse(localStorage.getItem(`auto-delete`) ?? "false")
   )
-  const [itemNames, setItemNames] = useState<
-    { name: string; quantity: number }[]
-  >(JSON.parse(localStorage.getItem(`${name}-calculator-item-names`) ?? "[]"))
-
-  const [materials, setMaterials] = useState<
-    { name: string; quantity: number }[]
-  >(JSON.parse(localStorage.getItem(`${name}-calculator-materials`) ?? "[]"))
-
-  const [workbenches, setWorkbenches] = useState<
-    { name: string; level: number }[]
-  >(JSON.parse(localStorage.getItem(`${name}-calculator-workbenches`) ?? "[]"))
 
   const { user } = useUserContext()
   const {
@@ -71,111 +61,20 @@ const Calculator = ({
   const { mutateAsync: postCalculation } = usePostCalculation()
   const { mutateAsync: deleteCalculation } = useDeleteCalculation()
 
-  // Effect for materials calculation
+  const {
+    itemNames,
+    materials,
+    workbenches,
+    setItemNames,
+    calculateMaterialsAndWorkbenches,
+  } = useCalculator(name)
+
   useEffect(() => {
     if (!data || !items) return
 
-    setMaterials(() => {
-      const materials: { name: string; quantity: number }[] = []
+    console.log(itemNames)
 
-      if (itemNames.length > 0) {
-        itemNames.forEach((item) => {
-          const foundItem = data.find(
-            (i: IItemFull<IItemCompact>) => i.item.readableName === item.name
-          )
-
-          if (foundItem && foundItem.recipe) {
-            console.log("recipe", foundItem.recipe)
-            if (foundItem.recipe.type !== "craft") return
-
-            Object.entries(foundItem.recipe.materials).forEach(
-              ([key, value]) => {
-                console.log(key, value)
-                const materialItem = items.items.find((item) => item.id === key)
-                const material = materials.find(
-                  (material) =>
-                    material.name === (materialItem?.readableName || key)
-                )
-
-                console.log(materials, material)
-
-                if (material) {
-                  material.quantity += (value as number) * item.quantity
-                } else {
-                  materials.push({
-                    name: materialItem?.readableName || key,
-                    quantity: (value as number) * item.quantity,
-                  })
-                }
-              }
-            )
-          } else {
-            materials.push({
-              name: item.name,
-              quantity: item.quantity,
-            })
-          }
-        })
-      }
-
-      // Update localStorage
-      localStorage.setItem(
-        `${name}-calculator-item-names`,
-        JSON.stringify(itemNames)
-      )
-      localStorage.setItem(
-        `${name}-calculator-materials`,
-        JSON.stringify(materials)
-      )
-
-      return materials
-    })
-
-    setWorkbenches(() => {
-      const workbenches: { name: string; level: number }[] = []
-
-      if (itemNames.length > 0) {
-        itemNames.forEach((item) => {
-          const foundItem = data.find(
-            (i: IItemFull<IItemCompact>) => i.item.readableName === item.name
-          )
-
-          if (foundItem && foundItem.recipe) {
-            const recipe = foundItem.recipe
-
-            if (recipe.type === "craft") {
-              const workbenchItem = items.items.find(
-                (item) => item.id === recipe.source.station
-              )
-              const workbench = workbenches.find(
-                (workbench) =>
-                  workbench.name ===
-                  (workbenchItem?.readableName || recipe.source.station)
-              )
-
-              if (workbench) {
-                workbench.level = Math.max(workbench.level, recipe.source.level)
-              } else {
-                workbenches.push({
-                  name:
-                    workbenchItem?.readableName ||
-                    recipe.source.station ||
-                    "Unknown",
-                  level: recipe.source.level,
-                })
-              }
-            }
-          }
-        })
-      }
-
-      localStorage.setItem(
-        `${name}-calculator-workbenches`,
-        JSON.stringify(workbenches)
-      )
-
-      return workbenches
-    })
+    calculateMaterialsAndWorkbenches(data, items)
   }, [itemNames, data, items])
 
   // Handler functions

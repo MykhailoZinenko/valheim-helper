@@ -5,6 +5,9 @@ import {
   damageModifiersValues,
   DamageProfile,
   DamageType,
+  Food,
+  GameObject,
+  IItem,
   IItemFull,
 } from "./types"
 
@@ -23,6 +26,17 @@ export function mapValues<K extends string | number, T, R = T>(
   return Object.fromEntries(
     Object.entries(obj).map(([key, val]) => [key, fn(val as T, key as K)])
   ) as Record<K, R>
+}
+
+export const caclType = (item: IItem<GameObject>) => {
+  if (
+    ["piece", "creature", "object", "spawner", "effect", "fish"].includes(
+      item.type
+    )
+  )
+    return null
+
+  return "Food" in item ? "food" : "resource"
 }
 
 export const maxLevel = (data: IItemFull<any> | undefined) => {

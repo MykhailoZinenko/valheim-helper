@@ -2,7 +2,7 @@ import { useGetItemById } from "@/lib/react-query/queriesAndMutations"
 import { useParams } from "react-router-dom"
 import Loader from "@/components/shared/Loader"
 import ItemHeader from "@/components/shared/ItemHeader"
-import { Creature, IItem, Item } from "@/types"
+import { IItem, Item } from "@/types"
 import Recipe from "@/components/shared/Recipe"
 import { maxLevel } from "@/utils"
 

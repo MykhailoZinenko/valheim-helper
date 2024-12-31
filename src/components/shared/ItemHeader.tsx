@@ -3,6 +3,10 @@ import { Link, useParams } from "react-router-dom"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { ReactNode } from "react"
 import { Creature, GameObject, IItem } from "@/types"
+import { Button } from "../ui/button"
+import { BookmarkIcon, PlusIcon, XIcon } from "lucide-react"
+import { useCalculator } from "@/context/CalculatorContext"
+import { caclType } from "@/utils"
 
 const ItemHeader = ({
   data,
@@ -18,11 +22,16 @@ const ItemHeader = ({
 
   console.log(data, currentLevel, level)
 
+  const { itemNames, setItemNames } = useCalculator(caclType(data) ?? "")
+
+  const inCalc =
+    itemNames.findIndex((item) => item.name === data.readableName) !== -1
+
   return (
     <>
       {" "}
       <Tabs defaultValue={level.toString()}>
-        <div className="flex justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between relative">
           <div className="flex gap-2 items-center">
             <img
               src={data.icon}
@@ -41,16 +50,16 @@ const ItemHeader = ({
 
           {(data as Creature).spawners &&
           (data as Creature).spawners.length > 0 ? (
-            <TabsList>
+            <TabsList className="sm:ml-auto">
               {Array.from({
                 length: maxLevel,
               }).map((_, i) => (
                 <Link
                   key={i}
                   to={`/item/${data.id}/${i}`}
-                  className="cursor-pointer"
+                  className="cursor-pointer w-full sm:w-auto"
                 >
-                  <TabsTrigger value={`${i}`}>
+                  <TabsTrigger value={`${i}`} className="w-full sm:w-auto">
                     <span>{i}</span>
                     <StarFilledIcon className="ml-1" />
                   </TabsTrigger>
@@ -58,6 +67,33 @@ const ItemHeader = ({
               ))}
             </TabsList>
           ) : null}
+
+          <div className="absolute right-0 top-0 sm:relative">
+            {caclType(data) && (
+              <Button
+                size="icon"
+                className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover"
+                onClick={() =>
+                  inCalc
+                    ? setItemNames((prev) =>
+                        prev.filter((item) => item.name !== data.readableName)
+                      )
+                    : setItemNames((prev) => [
+                        ...prev,
+                        { name: data.readableName, quantity: 1 },
+                      ])
+                }
+              >
+                {inCalc ? <XIcon /> : <PlusIcon />}
+              </Button>
+            )}
+            <Button
+              size="icon"
+              className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover ml-2"
+            >
+              <BookmarkIcon />
+            </Button>
+          </div>
         </div>
         {(data as Creature).spawners &&
         (data as Creature).spawners.length > 0 ? (

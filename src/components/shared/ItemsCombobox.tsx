@@ -51,13 +51,23 @@ const ItemsCombobox = <T extends IItemFull<any>>({
                   value={item.item.readableName}
                   onSelect={(currentValue) => {
                     setValue("")
-                    setItems((prev) =>
-                      prev.map((item) =>
-                        item.name === currentValue
-                          ? { ...item, quantity: item.quantity + 1 }
-                          : item
+                    setItems((prev) => {
+                      const existingItem = prev.find(
+                        (item) => item.name === currentValue
                       )
-                    )
+
+                      if (existingItem) {
+                        // If item exists, map through array and increment quantity for matching item
+                        return prev.map((item) =>
+                          item.name === currentValue
+                            ? { ...item, quantity: item.quantity + 1 }
+                            : item
+                        )
+                      } else {
+                        // If item doesn't exist, add new item with quantity 1
+                        return [...prev, { name: currentValue, quantity: 1 }]
+                      }
+                    })
                     setOpen(false)
                   }}
                   className="h-[40px]"
