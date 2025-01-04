@@ -1306,3 +1306,12 @@ export type IResponse<T> = {
   total: number
   items: T[]
 }
+
+export interface IPage {
+  id: string
+  type: "biome" | "calculator" | "page"
+  title: string
+  path: string
+  description?: string
+  icon?: string
+}

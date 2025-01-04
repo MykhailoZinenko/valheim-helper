@@ -58,15 +58,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (currentAccount) {
         // Get existing API keys if any
-        const existingKeys = await getDeveloperApiKeys(currentAccount.$id)
 
-        setUser({
+        setUser((prev) => ({
+          ...prev,
           id: currentAccount.$id,
           name: currentAccount.name,
           email: currentAccount.email,
-          apiKeys: existingKeys,
           plan: currentAccount.plan,
-        })
+        }))
 
         setIsAuthenticated(true)
         return true

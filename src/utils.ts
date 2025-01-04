@@ -5,7 +5,6 @@ import {
   damageModifiersValues,
   DamageProfile,
   DamageType,
-  Food,
   GameObject,
   IItem,
   IItemFull,

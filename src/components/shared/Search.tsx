@@ -26,6 +26,7 @@ import { filters } from "@/consts/searchFilters"
 import { Badge } from "../ui/badge"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 import { IItem, IItemCompact } from "@/types"
+import { IBasePage, getSearchablePages } from "@/types/pages"
 import Loader from "./Loader"
 
 interface FilterGroupProps {
@@ -107,13 +108,18 @@ interface SearchProps {
   variant: string
 }
 
+interface ISearchResult {
+  kind: "item" | "page"
+  data: IItem<IItemCompact> | IBasePage
+}
+
 const Search: React.FC<SearchProps> = ({ variant }) => {
   const [open, setOpen] = useState(false)
   const [showFilters, setShowFilters] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
-  const [results, setResults] = useState<IItem<IItemCompact>[]>([])
+  const [results, setResults] = useState<ISearchResult[]>([])
   const [pending, setPending] = useState(false)
-  const [filteredItems, setFilteredItems] = useState<IItem<IItemCompact>[]>([])
+  const [filteredItems, setFilteredItems] = useState<ISearchResult[]>([])
   const [showResults, setShowResults] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(-1)
   const [shouldLoadData, setShouldLoadData] = useState(false)
@@ -133,14 +139,38 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
 
   const totalFiltersApplied = Object.values(selectedFilters).flat().length
 
-  const fuse = React.useMemo(() => {
-    if (data) {
-      return new Fuse<IItem<IItemCompact>>(data.items, {
-        keys: ["id"],
-        threshold: 0.4,
-      })
-    }
-    return null
+  const combinedFuse = React.useMemo(() => {
+    if (!data) return null
+
+    const searchablePages = getSearchablePages()
+
+    // Transform items to include type
+    const transformedItems = data.items.map((item) => ({
+      kind: "item" as const,
+      data: item,
+      // Include searchable fields
+      id: item.id,
+    }))
+
+    // Transform pages to include type
+    const transformedPages = searchablePages.map((page) => ({
+      kind: "page" as const,
+      data: page,
+      // Include searchable fields
+      title: page.title,
+      description: page.description,
+      type: page.type,
+    }))
+
+    // Combine all items
+    const searchableItems = [...transformedItems, ...transformedPages]
+
+    console.log(searchableItems)
+
+    return new Fuse<ISearchResult>(searchableItems, {
+      keys: ["id", "title", "description", "type"],
+      threshold: 0.4,
+    })
   }, [data])
 
   const resetState = useCallback(() => {
@@ -166,29 +196,31 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
 
   // Apply filters to items
   const applyFilters = useCallback(
-    (items: IItem<IItemCompact>[]) => {
+    (items: ISearchResult[]) => {
       return items.filter((item) => {
+        if (item.kind === "page" || "path" in item.data)
+          return !totalFiltersApplied
         if (
           selectedFilters.type.length > 0 &&
-          !selectedFilters.type.includes(item.type)
+          !selectedFilters.type.includes(item.data.type)
         ) {
           return false
         }
         if (selectedFilters.biome.length > 0) {
-          const hasMatchingBiome = item.biomes?.some((biome) =>
+          const hasMatchingBiome = item.data.biomes?.some((biome) =>
             selectedFilters.biome.includes(biome)
           )
           if (!hasMatchingBiome) return false
         }
         if (
           selectedFilters.group.length > 0 &&
-          !selectedFilters.group.includes(item.group)
+          !selectedFilters.group.includes(item.data.group)
         ) {
           return false
         }
         if (
           selectedFilters.station.length > 0 &&
-          !selectedFilters.station.includes(item.station)
+          !selectedFilters.station.includes(item.data.station)
         ) {
           return false
         }
@@ -198,9 +230,22 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
     [selectedFilters]
   )
 
+  // Fixed useEffect
   useEffect(() => {
     if (data) {
-      const sorted = [...data.items].sort((a, b) => a.id.localeCompare(b.id))
+      // Transform items to ISearchResult format before sorting and filtering
+      const transformedItems: ISearchResult[] = data.items.map((item) => ({
+        kind: "item",
+        data: item,
+      }))
+
+      // Sort by id using the nested data structure
+      const sorted = [...transformedItems].sort((a, b) =>
+        (a.data as IItem<IItemCompact>).id.localeCompare(
+          (b.data as IItem<IItemCompact>).id
+        )
+      )
+
       const filtered = applyFilters(sorted)
       setFilteredItems(filtered)
     }
@@ -232,18 +277,20 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
 
   const debouncedSearch = useCallback(
     debounce((value: string) => {
-      if (fuse && value) {
-        const searchResults = fuse.search(value)
-        const filteredResults = applyFilters(
-          searchResults.map((result) => result.item)
-        )
-        setResults(filteredResults)
+      if (value) {
+        // Search items
+        const itemSearchResults = combinedFuse
+          ? combinedFuse.search(value).map((result) => result.item)
+          : []
+
+        const filteredItemResults = applyFilters(itemSearchResults)
+        setResults(filteredItemResults)
       } else {
         setResults([])
       }
       setPending(false)
     }, 300),
-    [fuse, applyFilters]
+    [combinedFuse, applyFilters]
   )
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -257,6 +304,9 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
   useEffect(() => {
     if (listRef.current) {
       listRef.current.scrollTo(0)
+    }
+    if (selectedIndex >= 0) {
+      setSelectedIndex(-1)
     }
   }, [searchTerm])
 
@@ -297,14 +347,18 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
                 ? results[selectedIndex]
                 : filteredItems[selectedIndex]
               if (selectedItem) {
-                navigate(`/item/${selectedItem.id}`)
+                navigate(
+                  selectedItem.kind === "page" && "path" in selectedItem.data
+                    ? selectedItem.data.path
+                    : `/item/${selectedItem.data.id}`
+                )
                 setOpen(false)
                 setShowResults(false)
               }
             } else if (open) {
               console.log("No item found")
               navigate(
-                `/item/${searchTerm ? results[0].id : filteredItems[0].id}`
+                `/item/${searchTerm ? (results[0].kind === "page" && "path" in results[0].data ? results[0].data.path : results[0].data.id) : filteredItems[0].kind === "page" && "path" in filteredItems[0].data ? filteredItems[0].data.path : filteredItems[0].data.id}`
               )
               setOpen(false)
             }
@@ -346,13 +400,48 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
   }
 
   const renderRow = ({ index, style }: RowProps) => {
-    const item = searchTerm ? results[index] : filteredItems[index]
+    const totalResults = searchTerm ? results : filteredItems
+    const item = totalResults[index]
     const selected = selectedIndex === index
+
+    if ("path" in item.data && item.kind === "page") {
+      // It's a page
+
+      console.log(item.data)
+      return (
+        <Link
+          to={item.data.isDynamic ? "#" : item.data.path} // For dynamic paths, you might want to show a different UI
+          key={item.data.id}
+          className={`px-4 py-2 border-b flex items-center w-full gap-2 transition-colors ${
+            selected ? "bg-color-secondary-bg" : "hover:bg-color-secondary-bg"
+          }`}
+          style={style}
+          onClick={() => {
+            if (variant === "inline") {
+              setShowResults(false)
+            } else {
+              setOpen(false)
+            }
+          }}
+        >
+          {item.data.icon && (
+            <img src={item.data.icon} loading="lazy" height={32} width={32} />
+          )}
+          <div className="flex flex-col items-start overflow-hidden">
+            <div className="font-medium">{item.data.title}</div>
+            <div className="text-sm text-muted-foreground truncate text-ellipsis">
+              <span className="capitalize">{item.type}</span>
+              {item.data.description && ` • ${item.data.description}`}
+            </div>
+          </div>
+        </Link>
+      )
+    }
 
     return (
       <Link
-        to={`/item/${item.id}`}
-        key={item.id}
+        to={`/item/${item.data.id}`}
+        key={item.data.id}
         className={`px-4 py-2 border-b flex items-center w-full gap-2 transition-colors ${
           selected ? "bg-color-secondary-bg" : "hover:bg-color-secondary-bg"
         }`}
@@ -361,8 +450,8 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
           variant === "inline" ? setShowResults(false) : setOpen(false)
         }
       >
-        <img src={item.icon} loading="lazy" height={32} width={32} />{" "}
-        {item.readableName}
+        <img src={item.data.icon} loading="lazy" height={32} width={32} />{" "}
+        {(item.data as IItem<IItemCompact>).readableName}
       </Link>
     )
   }
