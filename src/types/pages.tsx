@@ -1,6 +1,7 @@
 import SigninForm from "@/_auth/forms/SigninForm"
 import SignupForm from "@/_auth/forms/SignupForm"
 import About from "@/_root/pages/About"
+import ApiDocumentation from "@/_root/pages/ApiDocumentation"
 import Biome from "@/_root/pages/Biome"
 import FoodCalculator from "@/_root/pages/FoodCalculator"
 import Home from "@/_root/pages/Home"
@@ -157,6 +158,16 @@ export const APP_PAGES: IPageGroup[] = [
         element: <Settings />,
         icon: "/icons/settings.png",
         description: "App settings",
+        searchable: true,
+      },
+      {
+        id: "api-documentation",
+        type: "settings",
+        title: "API Documentation",
+        path: "/api-documentation",
+        element: <ApiDocumentation />,
+        icon: "/icons/api.png",
+        description: "API documentation",
         searchable: true,
       },
       {

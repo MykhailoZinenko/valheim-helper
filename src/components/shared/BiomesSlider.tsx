@@ -38,7 +38,7 @@ const BiomesSlider: React.FC<BiomesSliderProps> = ({ data }) => {
   }
 
   return (
-    <div className="w-full space-y-6 py-8">
+    <div className="w-full space-y-8 py-16">
       {/* Main Carousel */}
       <Carousel
         setApi={setCarouselApi}

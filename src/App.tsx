@@ -3,6 +3,7 @@ import AuthLayout from "./_auth/AuthLayout"
 import RootLayout from "./_root/RootLayout"
 import { Toaster } from "@/components/ui/toaster"
 import { APP_PAGES, INestedPage } from "./types/pages"
+import NotFoundPage from "./_root/pages/NotFound"
 
 function App() {
   // Helper function to recursively generate routes
@@ -28,6 +29,7 @@ function App() {
             </Route>
           )
         })}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Toaster />
     </main>

@@ -1,4 +1,5 @@
 import BiomesSlider from "@/components/shared/BiomesSlider"
+import Features from "@/components/shared/Features"
 import Hero from "@/components/shared/Hero"
 import Loader from "@/components/shared/Loader"
 import { useGetBiomes } from "@/lib/react-query/queriesAndMutations"
@@ -16,7 +17,7 @@ const Home = () => {
       <Hero />
       {/* <QuickTools /> */}
       <BiomesSlider data={biomes} />
-      {/* <Features itemsLength={items?.total} /> */}
+      <Features />
     </div>
   )
 }

@@ -26,7 +26,7 @@ const Biome = () => {
         </div>
       ) : (
         <div>
-          <div className="flex flex-col-reverse gap-8 my-4 md:flex-row md:items-center md:gap-4">
+          <div className="flex flex-col-reverse gap-8 py-8 md:flex-row md:items-center md:gap-4">
             <div className="w-full md:w-4/5 md:mt-5">
               <h1 className="text-5xl font-norse font-bold text-color-text-primary">
                 {biome.name}
@@ -43,7 +43,7 @@ const Biome = () => {
               />
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full md:mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full md:mx-auto py-8">
             {biome.resources.items
               .sort((a, b) =>
                 a.item.readableName.localeCompare(b.item.readableName)

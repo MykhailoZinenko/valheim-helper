@@ -3,7 +3,7 @@ import { Hammer } from "lucide-react"
 
 const Hero = () => {
   return (
-    <div className="relative w-full my-12 mt-0 flex flex-col justify-center items-center text-center">
+    <div className="relative w-full py-16 flex flex-col justify-center items-center text-center">
       {/* Viking-themed background pattern with responsive opacity */}
       <div className="absolute inset-0 bg-[url('/norse-pattern.svg')] opacity-5" />
 

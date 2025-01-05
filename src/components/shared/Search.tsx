@@ -430,7 +430,7 @@ const Search: React.FC<SearchProps> = ({ variant }) => {
           <div className="flex flex-col items-start overflow-hidden">
             <div className="font-medium">{item.data.title}</div>
             <div className="text-sm text-muted-foreground truncate text-ellipsis">
-              <span className="capitalize">{item.type}</span>
+              <span className="capitalize">{item.data.type}</span>
               {item.data.description && ` • ${item.data.description}`}
             </div>
           </div>
