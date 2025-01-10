@@ -46,7 +46,7 @@ const generateCode = (
   endpoint: string,
   example: APIBlockProps["example"]
 ): string => {
-  const baseUrl = "https://api.valheim-companion.com/v1"
+  const baseUrl = "https://valheim-helper-server.onrender.com/api"
   const fullUrl = `${baseUrl}${endpoint}`
 
   switch (language) {
@@ -193,7 +193,7 @@ const APIBlock: React.FC<APIBlockProps> = ({ method, endpoint, example }) => {
     : null
 
   return (
-    <div className="w-full rounded-xl border border-accent/10 overflow-hidden bg-color-primary-bg/30 backdrop-blur-sm transition-all duration-300 hover:border-accent/20">
+    <div className="w-full rounded-xl border border-accent/10 bg-color-primary-bg/30 backdrop-blur-sm transition-all duration-300 hover:border-accent/20">
       {/* Header with endpoint info */}
       <div className="flex items-center gap-2 p-3 sm:gap-3 sm:p-4 border-b border-accent/10">
         <span
@@ -220,7 +220,7 @@ const APIBlock: React.FC<APIBlockProps> = ({ method, endpoint, example }) => {
       <div className="grid divide-y divide-accent/10">
         {/* Request (if provided) */}
         {example.request && (
-          <div className="p-3 sm:p-4">
+          <div className="p-3 sm:p-4 overflow-x-auto">
             <div className="flex items-center justify-between mb-1 sm:mb-2">
               <div className="flex items-center gap-2">
                 <span className="text-xs sm:text-sm font-medium text-color-text-secondary">
@@ -264,7 +264,7 @@ const APIBlock: React.FC<APIBlockProps> = ({ method, endpoint, example }) => {
         )}
 
         {/* Response */}
-        <div className="p-3 sm:p-4">
+        <div className="p-3 sm:p-4 overflow-x-auto">
           <div className="flex items-center justify-between mb-1 sm:mb-2">
             <span className="text-xs sm:text-sm font-medium text-color-text-secondary">
               Response

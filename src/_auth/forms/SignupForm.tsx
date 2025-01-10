@@ -1,6 +1,7 @@
+// SignupForm.tsx
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate } from "react-router-dom"
-
+import { useForm } from "react-hook-form"
 import {
   Form,
   FormControl,
@@ -11,7 +12,6 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { useForm } from "react-hook-form"
 import { SignupValidation } from "@/lib/validation"
 import { z } from "zod"
 import { useToast } from "@/hooks/use-toast"
@@ -20,11 +20,11 @@ import {
   useSignInAccount,
 } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
+import { signInWithGoogle } from "@/lib/appwrite/api"
 
 const SignupForm = () => {
   const { toast } = useToast()
   const { checkAuthUser } = useUserContext()
-
   const navigate = useNavigate()
 
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } =
@@ -32,7 +32,6 @@ const SignupForm = () => {
 
   const { mutateAsync: signInAccount } = useSignInAccount()
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
@@ -42,24 +41,39 @@ const SignupForm = () => {
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
-    const newUser = await createUserAccount(values)
+    const { data: newUser, error: createError } =
+      await createUserAccount(values)
 
-    if (!newUser) {
+    if (createError) {
       return toast({
-        title: "Sign up failed. Please try again.",
+        variant: "destructive",
+        title: "Account Creation Failed",
+        description: createError.message,
+        duration: 5000,
       })
     }
 
-    const session = await signInAccount({
+    if (!newUser) {
+      return toast({
+        variant: "destructive",
+        title: "Sign up failed",
+        description: "Something went wrong. Please try again.",
+        duration: 5000,
+      })
+    }
+
+    const { data: session, error: signInError } = await signInAccount({
       email: values.email,
       password: values.password,
     })
 
-    if (!session) {
+    if (signInError) {
       return toast({
-        title: "Sign up failed. Please try again.",
+        variant: "destructive",
+        title: "Authentication Failed",
+        description: signInError.message,
+        duration: 5000,
       })
     }
 
@@ -67,11 +81,36 @@ const SignupForm = () => {
 
     if (isLoggedIn) {
       form.reset()
-
       navigate("/")
     } else {
       return toast({
-        title: "Sign up failed. Please try again.",
+        variant: "destructive",
+        title: "Sign up failed",
+        description: "Please try signing in with your new account.",
+        duration: 5000,
+      })
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await signInWithGoogle()
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Google Sign Up Failed",
+          description: error.message,
+          duration: 5000,
+        })
+      }
+      // Successful case will redirect to Google
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Failed to initialize Google sign up",
+        duration: 5000,
       })
     }
   }
@@ -105,7 +144,7 @@ const SignupForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="text-color-text-tertiary" />
+                  <FormMessage className="text-color-error" />
                 </FormItem>
               )}
             />
@@ -125,7 +164,7 @@ const SignupForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="text-color-text-tertiary" />
+                  <FormMessage className="text-color-error" />
                 </FormItem>
               )}
             />
@@ -145,32 +184,53 @@ const SignupForm = () => {
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage className="text-color-text-tertiary" />
+                  <FormMessage className="text-color-error" />
                 </FormItem>
               )}
             />
             <Button
               type="submit"
               className="w-full py-2 px-4 bg-color-button-bg text-color-button-text font-semibold rounded-md hover:bg-color-button-hover transition-all duration-300"
+              disabled={isCreatingAccount}
             >
               {isCreatingAccount ? (
-                <div className="flex items-center justify-center">
-                  Loading...
+                <div className="flex items-center justify-center gap-2">
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Creating account...
                 </div>
               ) : (
                 "Sign up"
               )}
             </Button>
+
             <p className="text-center text-sm text-color-text-tertiary">
-              Already have an account?
-              <Link
-                className="text-color-link hover:underline ml-1"
-                to="/sign-in"
-              >
+              Already have an account?{" "}
+              <Link className="text-color-link hover:underline" to="/sign-in">
                 Log in
               </Link>
             </p>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-color-border" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-color-secondary-bg text-color-text-tertiary">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full py-2 px-4 border border-color-border text-color-text-primary font-semibold rounded-md hover:bg-color-button-hover transition-all duration-300"
+            onClick={handleGoogleSignIn}
+          >
+            <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
+            Sign up with Google
+          </Button>
         </div>
       </div>
     </Form>

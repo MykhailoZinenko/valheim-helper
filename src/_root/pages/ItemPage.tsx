@@ -2,12 +2,16 @@ import { useGetItemById } from "@/lib/react-query/queriesAndMutations"
 import { useParams } from "react-router-dom"
 import Loader from "@/components/shared/Loader"
 import ItemHeader from "@/components/shared/ItemHeader"
-import { IItem, Item } from "@/types"
-import Recipe from "@/components/shared/Recipe"
 import { maxLevel } from "@/utils"
+import JsonDisplay from "@/components/shared/JsonDisplay"
+import DataDisplay from "@/components/shared/DataDisplay"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { FileIcon, FileJsonIcon } from "lucide-react"
 
 const ItemPage = () => {
   const { id } = useParams()
+  const [dataDisplay, setDataDisplay] = useState(true)
 
   const { data, isPending, isError } = useGetItemById(id || "")
 
@@ -16,21 +20,23 @@ const ItemPage = () => {
       <Loader size="lg" />
     </div>
   ) : (
-    <div>
+    <div className="w-full">
       <ItemHeader data={data.item} maxLevel={maxLevel(data)}>
-        <pre className="whitespace-pre-wrap break-all">
-          {JSON.stringify(data, null, 2)}
-        </pre>
+        <div className="flex flex-col gap-4">
+          <Button
+            size="icon"
+            className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover ml-auto"
+            onClick={() => setDataDisplay(!dataDisplay)}
+          >
+            {dataDisplay ? <FileJsonIcon /> : <FileIcon />}
+          </Button>
+          {dataDisplay ? (
+            <DataDisplay data={data} />
+          ) : (
+            <JsonDisplay data={data} />
+          )}
+        </div>
       </ItemHeader>
-      {data.recipe && (
-        <>
-          <h2 className="text-4xl font-norse mt-6 mb-2">Recipe</h2>
-          <Recipe
-            recipe={data.recipe}
-            maxQuality={(data.item as IItem<Item>).maxLvl ?? 1}
-          />
-        </>
-      )}
     </div>
   )
 }

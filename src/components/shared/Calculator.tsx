@@ -162,7 +162,7 @@ const Calculator = ({
   }
 
   return (
-    <div className="relative w-full my-8 animate-fade-in">
+    <div className="relative w-full animate-fade-in">
       {/* Viking pattern background */}
       <div className="absolute inset-0 bg-[url('/norse-pattern.svg')] opacity-5" />
 

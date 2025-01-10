@@ -10,8 +10,8 @@ const RootLayout = () => {
       <SidebarProvider>
         {" "}
         <LeftSidebar />
-        <section className="w-full flex flex-col items-center">
-          <div className="w-full 2xl:w-fit 2xl:self-end flex justify-between 2xl:justify-end p-6 2xl:rounded-md sticky 2xl:fixed top-0 bg-color-primary-bg z-20">
+        <section className="w-full flex flex-col items-center px-8">
+          <div className="w-full 2xl:w-fit 2xl:self-end flex justify-between 2xl:justify-end 2xl:rounded-md sticky 2xl:fixed top-0 bg-color-primary-bg z-20 py-4 bg-transparent">
             <SidebarTrigger className="bg-color-button-bg text-color-button-text hover:bg-color-button-hover" />
 
             <div className="flex space-x-2">
@@ -20,7 +20,7 @@ const RootLayout = () => {
             </div>
           </div>
 
-          <div className="w-full h-full p-6 pt-4 2xl:pt-6 2xl:pr-32 max-w-screen-xl">
+          <div className="w-full h-full max-w-screen-xl py-4 2xl:py-24">
             <Outlet />
           </div>
         </section>

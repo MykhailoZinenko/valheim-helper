@@ -3,8 +3,11 @@ import { Compass, ArrowRight, Code } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import APIBlock from "./APIBlock"
 import VignetteImage from "./VignetteImage"
+import { useNavigate } from "react-router-dom"
 
 const Features = () => {
+  const navigate = useNavigate()
+
   const handleExploreClick = (e: React.MouseEvent) => {
     e.preventDefault()
     // Create and dispatch a keyboard event for Ctrl/Cmd + K
@@ -97,7 +100,12 @@ const Features = () => {
             }}
           />
 
-          <Button className="group" variant="outline" size="lg">
+          <Button
+            className="group"
+            variant="outline"
+            size="lg"
+            onClick={() => navigate("/api-documentation")}
+          >
             View API Documentation
             <ArrowRight className="ml-2 w-4 h-4 transition-transform group-hover:translate-x-1" />
           </Button>

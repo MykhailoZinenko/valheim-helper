@@ -17,16 +17,16 @@ import { z } from "zod"
 import { useToast } from "@/hooks/use-toast"
 import { useSignInAccount } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
+import { signInWithGoogle } from "@/lib/appwrite/api"
+import GoogleLogo from "@/components/ui/GoogleLogo"
 
 const SigninForm = () => {
   const { toast } = useToast()
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext()
-
   const navigate = useNavigate()
 
   const { mutateAsync: signInAccount } = useSignInAccount()
 
-  // 1. Define your form.
   const form = useForm<z.infer<typeof SigninValidation>>({
     resolver: zodResolver(SigninValidation),
     defaultValues: {
@@ -35,16 +35,17 @@ const SigninForm = () => {
     },
   })
 
-  // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SigninValidation>) {
-    const session = await signInAccount({
+    const { data: session, error } = await signInAccount({
       email: values.email,
       password: values.password,
     })
 
-    if (!session) {
+    if (error) {
       return toast({
-        title: "Sign up failed. Please try again.",
+        variant: "destructive",
+        title: "Authentication Error",
+        description: error.message,
       })
     }
 
@@ -52,11 +53,33 @@ const SigninForm = () => {
 
     if (isLoggedIn) {
       form.reset()
-
       navigate("/")
     } else {
       return toast({
-        title: "Sign up failed. Please try again.",
+        variant: "destructive",
+        title: "Sign in failed",
+        description: "Please try again later",
+      })
+    }
+  }
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const { error } = await signInWithGoogle()
+
+      if (error) {
+        toast({
+          variant: "destructive",
+          title: "Google Sign In Failed",
+          description: error.message,
+        })
+      }
+      // Successful case will redirect to Google
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: "Failed to initialize Google sign in",
       })
     }
   }
@@ -135,6 +158,27 @@ const SigninForm = () => {
               </Link>
             </p>
           </form>
+
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t border-color-border" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="px-2 bg-color-secondary-bg text-color-text-tertiary">
+                Or continue with
+              </span>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="w-full py-2 px-4 border border-color-border text-color-text-primary font-semibold rounded-md hover:bg-color-button-hover transition-all duration-300"
+            onClick={handleGoogleSignIn}
+          >
+            <GoogleLogo />
+            Sign in with Google
+          </Button>
         </div>
       </div>
     </Form>

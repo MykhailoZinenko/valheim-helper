@@ -1,5 +1,6 @@
 import SigninForm from "@/_auth/forms/SigninForm"
 import SignupForm from "@/_auth/forms/SignupForm"
+import OAuthSuccess from "@/_auth/OAuthSuccess"
 import About from "@/_root/pages/About"
 import ApiDocumentation from "@/_root/pages/ApiDocumentation"
 import Biome from "@/_root/pages/Biome"
@@ -122,6 +123,15 @@ export const APP_PAGES: IPageGroup[] = [
         title: "Sign Up",
         path: "/sign-up",
         element: <SignupForm />,
+        searchable: false,
+        isPublic: true,
+      },
+      {
+        id: "oauth-success",
+        type: "auth",
+        title: "OAuth Success",
+        path: "/success",
+        element: <OAuthSuccess />,
         searchable: false,
         isPublic: true,
       },

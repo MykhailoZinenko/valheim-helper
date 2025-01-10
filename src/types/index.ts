@@ -1315,3 +1315,8 @@ export interface IPage {
   description?: string
   icon?: string
 }
+
+export type AuthError = {
+  type: "auth_error" | "server_error" | "validation_error" | "unknown_error"
+  message: string
+}
