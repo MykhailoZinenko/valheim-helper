@@ -1,6 +1,4 @@
-import React from "react"
 import { Card } from "@/components/ui/card"
-import { Shield, Swords, Crosshair, Apple, Trees, Crown } from "lucide-react"
 
 const DataDisplay = ({ data }: { data: any }) => {
   const renderValue = (value: any, key = "") => {

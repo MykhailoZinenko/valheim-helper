@@ -1,11 +1,9 @@
-import DataTable from "@/components/shared/DataTable"
 import ItemLink from "@/components/shared/ItemLink"
 import Loader from "@/components/shared/Loader"
 import CreaturesTable from "@/components/shared/tables/CreaturesTable"
 import FoodTable from "@/components/shared/tables/FoodTable"
 import VignetteImage from "@/components/shared/VignetteImage"
 import { useGetBiomeById } from "@/lib/react-query/queriesAndMutations"
-import { cn } from "@/lib/utils"
 import { type Biome } from "@/types"
 import { useParams } from "react-router-dom"
 

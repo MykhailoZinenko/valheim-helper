@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
 import { Quote } from "lucide-react"
 import { AnimatePresence, motion } from "framer-motion"
 
