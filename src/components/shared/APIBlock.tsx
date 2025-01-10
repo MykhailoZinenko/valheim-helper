@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { Code, CopyCheck, Copy } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { CopyCheck, Copy } from "lucide-react"
 import {
   Select,
   SelectContent,

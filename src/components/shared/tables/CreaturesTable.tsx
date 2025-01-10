@@ -1,19 +1,13 @@
 import { Button } from "@/components/ui/button"
-import {
-  CreatureRow,
-  ItemColumn,
-  itemNameFilter,
-  TableRow,
-} from "@/types/tables"
+import { CreatureRow, itemNameFilter, TableRow } from "@/types/tables"
 import { ColumnDef, Row } from "@tanstack/react-table"
 import { ArrowUpDown } from "lucide-react"
 import DataTable from "../DataTable"
-import { Creature, IItemFull, NormalAttackProfile } from "@/types"
+import { Creature, IItemFull } from "@/types"
 import { FC } from "react"
 import ItemLink from "../ItemLink"
 import { caluclateAvgDamage, maxLevel } from "@/utils"
 import { StarFilledIcon } from "@radix-ui/react-icons"
-import { parse } from "path"
 
 const creatureColumns: ColumnDef<TableRow<CreatureRow>>[] = [
   {

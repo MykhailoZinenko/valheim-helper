@@ -1,4 +1,3 @@
-// SignupForm.tsx
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Link, useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
@@ -63,7 +62,7 @@ const SignupForm = () => {
       })
     }
 
-    const { data: session, error: signInError } = await signInAccount({
+    const { error: signInError } = await signInAccount({
       email: values.email,
       password: values.password,
     })

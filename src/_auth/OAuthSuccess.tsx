@@ -1,4 +1,3 @@
-// src/pages/OAuthSuccess.tsx
 import { useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUserContext } from "@/context/AuthContext"
