@@ -18,7 +18,7 @@ const FoodCalculator = () => {
       ) : (
         <div>
           <Tabs defaultValue="0">
-            <TabsList className="w-full">
+            <TabsList className="w-full mb-8">
               <TabsTrigger value="0" className="w-full">
                 Food calculator
               </TabsTrigger>

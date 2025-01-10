@@ -13,7 +13,7 @@ export default function CallbackPage() {
         const session = await account.getSession("current")
         if (session) {
           await saveOAuthUserToDB()
-          navigate("/")
+          navigate("/", { replace: true })
         }
       } catch (error) {
         console.error("OAuth callback error:", error)

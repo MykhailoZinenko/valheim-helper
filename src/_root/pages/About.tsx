@@ -7,7 +7,6 @@ const About = () => {
       <h1 className="text-5xl font-norse font-bold text-color-text-primary">
         About Valheim Helper
       </h1>
-
       <h2 className="text-3xl mt-6 font-norse font-bold text-color-text-secondary">
         Introduction
       </h2>
@@ -54,7 +53,6 @@ const About = () => {
         </a>
         .
       </p>
-
       <h2 className="text-3xl mt-6 font-norse font-bold text-color-text-secondary">
         How It Started
       </h2>
@@ -66,7 +64,6 @@ const About = () => {
         should you cultivate for the next harvest? It was always a game of
         calculations, so our first attempt to solve it was this file:
       </p>
-
       <Card className="m-4 max-w-[350px]">
         <a
           href="/assets/What we need for boss №3.txt"
@@ -77,7 +74,6 @@ const About = () => {
           <span>First attempt.txt</span>
         </a>
       </Card>
-
       <p className="text-color-text-tertiary mt-2 indent-4 leading-relaxed">
         As you can imagine, managing everything in a text file wasn't the most
         efficient solution—it was tedious. So I began searching for better
@@ -86,7 +82,6 @@ const About = () => {
         switching between tabs and losing track of progress was still a hassle,
         and I wanted a smoother, all-in-one tool.
       </p>
-
       <h2 className="text-3xl mt-6 font-norse font-bold text-color-text-secondary">
         The Result
       </h2>
@@ -98,7 +93,6 @@ const About = () => {
         open-source projects that served as the foundation for this tool. Thanks
         for reading—I hope Valheim Helper enhances your gaming experience!
       </p>
-
       <h2 className="text-3xl mt-6 font-norse font-bold text-color-text-secondary">
         Credits
       </h2>
@@ -106,7 +100,6 @@ const About = () => {
         Huge thanks to the developers whose work inspired this project. You can
         support them and show appreciation for their efforts:
       </p>
-
       <Card className="m-4 max-w-[350px]">
         <a
           href="http://kirilloid.ru/"
@@ -117,7 +110,6 @@ const About = () => {
           <CoffeeIcon className="mt-0" />
         </a>
       </Card>
-
       <Card className="m-4 max-w-[350px]">
         <a
           href="https://buymeacoffee.com/studiohelga"
@@ -125,6 +117,66 @@ const About = () => {
           className="flex flex-row items-center justify-between p-4 gap-4 text-color-link hover:underline"
         >
           <span>Studio Helga</span>
+          <CoffeeIcon className="mt-0" />
+        </a>
+      </Card>
+      <p className="text-color-text-tertiary mt-2 indent-4 leading-relaxed">
+        This project uses some work, including but not limited to graphic
+        content from the Valheim (
+        <a
+          href="https://www.valheimgame.com/"
+          target="_blank"
+          className="text-color-link hover:underline"
+        >
+          site
+        </a>
+        ,{" "}
+        <a
+          href="https://store.steampowered.com/app/892970/Valheim/"
+          target="_blank"
+          className="text-color-link hover:underline"
+        >
+          steam
+        </a>
+        ), developed by
+        <a
+          href="https://irongatestudio.se/"
+          target="_blank"
+          className="text-color-link hover:underline"
+        >
+          IronGate
+        </a>{" "}
+        and published by{" "}
+        <a
+          href="https://www.coffeestainstudios.com/"
+          target="_blank"
+          className="text-color-link hover:underline"
+        >
+          Coffeestain
+        </a>
+        . The copyrighted content is used on the terms of fair use, respecting
+        corresponding rights. Specifically this project is (a) non-commercial,
+        non-profit (b) primarly a complimentary for the game.{" "}
+        <a
+          href="https://www.valheimgame.com/eula/"
+          target="_blank"
+          className="text-color-link hover:underline"
+        >
+          EULA
+        </a>
+      </p>
+      <p className="text-color-text-tertiary mt-2 indent-4 leading-relaxed">
+        You could also support me, to cover the costs of hosting (your money
+        only goes to pay for the server, not for the development or personal
+        use):
+      </p>
+      <Card className="m-4 max-w-[350px]">
+        <a
+          href="https://buymeacoffee.com/valheimhelper"
+          target="_blank"
+          className="flex flex-row items-center justify-between p-4 gap-4 text-color-link hover:underline"
+        >
+          <span>Mykhailo Zinenko</span>
           <CoffeeIcon className="mt-0" />
         </a>
       </Card>
