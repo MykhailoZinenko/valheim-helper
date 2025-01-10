@@ -8,8 +8,6 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "electron:dev": "vite --mode=development",
-    "electron:build": "vite build && electron-builder",
     "lint": "eslint .",
     "preview": "vite preview"
   },
