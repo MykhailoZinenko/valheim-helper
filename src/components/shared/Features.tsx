@@ -58,7 +58,7 @@ const Features = () => {
 
         <div className="relative h-[400px] md:h-[300px] w-full rounded-2xl overflow-hidden">
           <VignetteImage
-            src="/assets/images/app-interface.jpg"
+            src="/assets/images/app-interface.webp"
             fromColor="from-color-primary-bg"
             fromPercent="from-[0%]"
           />
@@ -114,7 +114,7 @@ const Features = () => {
         <div className="md:order-1 relative">
           <div className="relative h-[400px] md:h-[600px] w-full rounded-2xl overflow-hidden">
             <VignetteImage
-              src="/assets/images/api-documentation.jpg"
+              src="/assets/images/api-documentation.webp"
               fromColor="from-color-primary-bg"
               fromPercent="from-[0%]"
             />

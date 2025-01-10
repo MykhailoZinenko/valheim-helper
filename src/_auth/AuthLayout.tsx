@@ -15,7 +15,7 @@ const AuthLayout = () => {
           </section>
 
           <VignetteImage
-            src="/assets/images/side-img.png"
+            src="/assets/images/side-img.webp"
             variant="absolute"
             fromColor="from-color-primary-bg"
           />

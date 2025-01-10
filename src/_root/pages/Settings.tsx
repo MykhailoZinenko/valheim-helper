@@ -43,7 +43,7 @@ const Settings = () => {
   const { data: apiKeys, isPending, isError } = useGetDevelopKeys(user.id)
 
   const [showRevoked, setShowRevoked] = useState(
-    JSON.parse(localStorage.getItem(`show-revoked`) ?? "true")
+    JSON.parse(localStorage.getItem(`show-revoked`) ?? "false")
   )
 
   const activeKeysCount =
@@ -140,6 +140,7 @@ const Settings = () => {
           <div className="flex items-center space-x-2">
             <Switch
               id="show-revoked"
+              checked={showRevoked}
               onCheckedChange={() => {
                 setShowRevoked(!showRevoked)
                 localStorage.setItem(

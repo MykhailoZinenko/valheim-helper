@@ -131,9 +131,10 @@ export async function signInWithGoogle() {
   try {
     const session = await account.createOAuth2Session(
       OAuthProvider.Google,
-      "http://localhost:5173/success",
-      "http://localhost:5173/sign-in"
+      `${window.location.origin}/callback`, // Change this
+      `${window.location.origin}/sign-in`
     )
+
     return { data: session, error: null }
   } catch (error: any) {
     console.error("Google sign in error:", error)
@@ -170,6 +171,8 @@ export async function saveUserToDB(user: {
 export async function saveOAuthUserToDB() {
   try {
     const currentAccount = await account.get()
+
+    console.log(currentAccount)
 
     // Check if user already exists in database
     const users = await databases.listDocuments(
@@ -225,12 +228,22 @@ export async function signOutAccount() {
   try {
     const session = await account.deleteSession("current")
 
+    // Get the theme value before clearing
+    const theme = localStorage.getItem("vite-ui-theme")
+
+    // Clear all localStorage
+    localStorage.clear()
+
+    // Restore the theme
+    if (theme) {
+      localStorage.setItem("vite-ui-theme", theme)
+    }
+
     return session
   } catch (error) {
     console.log(error)
   }
 }
-
 export async function getUserCalculations(userId: string, name: string) {
   try {
     const userCalculations = await databases.listDocuments(

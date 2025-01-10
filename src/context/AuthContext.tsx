@@ -1,4 +1,5 @@
 import { getCurrentUser } from "@/lib/appwrite/api"
+import { account } from "@/lib/appwrite/config"
 import {
   useCreateDeveloperKey,
   useRevokeDeveloperKey,
@@ -54,6 +55,8 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const checkAuthUser = async () => {
     try {
       const currentAccount = await getCurrentUser()
+
+      console.log(currentAccount)
 
       if (currentAccount) {
         // Get existing API keys if any
@@ -125,16 +128,28 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   useEffect(() => {
-    if (
-      localStorage.getItem("cookieFallback") === "[]" ||
-      localStorage.getItem("cookieFallback") === null
-    ) {
-      if (pathname !== "/sign-up") {
-        navigate("/sign-in")
+    const checkSession = async () => {
+      try {
+        // Try to get current session
+        const session = await account.getSession("current")
+
+        if (!session) {
+          if (pathname !== "/sign-up" && pathname !== "/callback") {
+            navigate("/sign-in")
+          }
+          return
+        }
+
+        await checkAuthUser()
+      } catch (error) {
+        console.error("Session check error:", error)
+        if (pathname !== "/sign-up" && pathname !== "/callback") {
+          navigate("/sign-in")
+        }
       }
     }
 
-    checkAuthUser()
+    checkSession()
   }, [])
 
   const value = {

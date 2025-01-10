@@ -1,6 +1,5 @@
 import SigninForm from "@/_auth/forms/SigninForm"
 import SignupForm from "@/_auth/forms/SignupForm"
-import OAuthSuccess from "@/_auth/OAuthSuccess"
 import About from "@/_root/pages/About"
 import ApiDocumentation from "@/_root/pages/ApiDocumentation"
 import Biome from "@/_root/pages/Biome"
@@ -9,6 +8,7 @@ import Home from "@/_root/pages/Home"
 import ItemPage from "@/_root/pages/ItemPage"
 import ResourceCalculator from "@/_root/pages/ResourceCalculator"
 import Settings from "@/_root/pages/Settings"
+import CallbackPage from "@/_auth/CallbackPage"
 
 // Types for page structure
 export interface IBasePage {
@@ -127,11 +127,11 @@ export const APP_PAGES: IPageGroup[] = [
         isPublic: true,
       },
       {
-        id: "oauth-success",
+        id: "oauth-callback",
         type: "auth",
-        title: "OAuth Success",
-        path: "/success",
-        element: <OAuthSuccess />,
+        title: "OAuth Callback",
+        path: "/callback",
+        element: <CallbackPage />,
         searchable: false,
         isPublic: true,
       },
