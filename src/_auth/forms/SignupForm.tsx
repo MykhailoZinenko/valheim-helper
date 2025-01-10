@@ -20,6 +20,7 @@ import {
 } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
 import { signInWithGoogle } from "@/lib/appwrite/api"
+import GoogleLogo from "@/components/ui/GoogleLogo"
 
 const SignupForm = () => {
   const { toast } = useToast()
@@ -227,7 +228,7 @@ const SignupForm = () => {
             className="w-full py-2 px-4 border border-color-border text-color-text-primary font-semibold rounded-md hover:bg-color-button-hover transition-all duration-300"
             onClick={handleGoogleSignIn}
           >
-            <img src="/google.svg" alt="Google" className="w-5 h-5 mr-2" />
+            <GoogleLogo />
             Sign up with Google
           </Button>
         </div>

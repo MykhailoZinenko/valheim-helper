@@ -6,7 +6,6 @@ import { APP_PAGES, INestedPage } from "./types/pages"
 import NotFoundPage from "./_root/pages/NotFound"
 
 function App() {
-  // Helper function to recursively generate routes
   const generateRoutes = (pages: INestedPage[]) => {
     return pages.map((page) => {
       const route = (
